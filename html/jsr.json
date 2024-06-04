@@ -1,0 +1,7 @@
+{
+  "name": "@thai/html",
+  "version": "0.0.4",
+  "exports": {
+    ".": "./html.ts"
+  }
+}
