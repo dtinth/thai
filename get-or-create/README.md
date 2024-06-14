@@ -25,3 +25,5 @@ for (const word of words) {
 //   'three' => { count: 1 }
 // }
 ```
+
+It can also be used with a `WeakMap` to implement a memoization cache.

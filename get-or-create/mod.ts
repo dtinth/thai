@@ -11,7 +11,7 @@
  * @returns The value associated with the key, or the newly created value.
  */
 export function getOrCreate<K, V>(
-  map: Pick<Map<K, V>, "get" | "set" | "has">,
+  map: MapLike<K, V>,
   key: K,
   createValue: (key: K) => V
 ): V {
@@ -21,4 +21,13 @@ export function getOrCreate<K, V>(
   const value = createValue(key);
   map.set(key, value);
   return value;
+}
+
+/**
+ * A map-like object that can be used with the getOrCreate function.
+ */
+export interface MapLike<K, V> {
+  get(key: K): V | undefined;
+  set(key: K, value: V): void;
+  has(key: K): boolean;
 }
