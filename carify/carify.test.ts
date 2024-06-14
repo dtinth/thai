@@ -20,3 +20,12 @@ it("should generate a car file", async () => {
     .join("");
   expect(carHashHex).toBe("3ccadd74afbac9e1295b6a94ad4ff062169ab638");
 });
+
+it("should generate a car for empty file", async () => {
+  const emptyFile = new Uint8Array();
+  const filename = "empty.txt";
+  const result = await carify(emptyFile, filename);
+  expect(result.cid).toBe(
+    "bafybeid76eyswbhp3f7zrgvkelbpsyoqoa4qzprhraibj6y7cvi7oh2bzq"
+  );
+});
