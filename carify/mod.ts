@@ -32,6 +32,9 @@ export async function carify(
   };
 }
 
+/**
+ * The result of calling the `carify` function.
+ */
 export interface CarifyResult {
   /** The content identifier that can be used to retrieve the content from IPFS */
   cid: string;
