@@ -207,14 +207,14 @@ export class Hypertext {
    * Get the HTML code.
    * @internal
    */
-  get __html() {
+  get __html(): string {
     return this.toHtml();
   }
 
   /**
    * Stream the HTML code.
    */
-  async *toHtmlStream() {
+  async *toHtmlStream(): AsyncIterable<string> {
     for await (const part of this.htmlGenerator.generateAsync()) {
       yield part;
     }
