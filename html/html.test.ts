@@ -1,5 +1,5 @@
 import { expect, it } from "vitest";
-import { html, renderHtml } from "./html";
+import { html, renderHtml, renderHtmlAsync, renderHtmlStream } from "./html";
 
 it("converts strings", async () => {
   expect(renderHtml("meow")).toBe("meow");
@@ -45,4 +45,48 @@ it("keeps hypertext as is", async () => {
 
 it("renders __html properties as is", async () => {
   expect(renderHtml({ __html: "<>" })).toBe("<>");
+});
+
+it("renders promise", async () => {
+  expect(await renderHtmlAsync(html`x = ${Promise.resolve(42)}`)).toBe(
+    "x = 42"
+  );
+});
+
+it("renders generator", async () => {
+  function* stuff() {
+    yield 42;
+  }
+  expect(await renderHtmlAsync(html`x = ${stuff()}`)).toBe("x = 42");
+});
+
+it("renders async generator", async () => {
+  async function* stuff() {
+    yield 42;
+  }
+  expect(await renderHtmlAsync(html`x = ${stuff()}`)).toBe("x = 42");
+});
+
+it("streams", async () => {
+  async function loadTodoIds() {
+    return ["todo1", "todo2", "todo3"];
+  }
+  async function todo(id: string) {
+    return html`<li>${id}</li>`;
+  }
+  async function todos() {
+    const todos = await loadTodoIds();
+    return todos.map((id) => todo(id));
+  }
+  const parts: string[] = [];
+  for await (const part of renderHtmlStream(
+    html`<ul>
+      ${todos()}
+    </ul>`
+  )) {
+    parts.push(part);
+  }
+  expect(parts.join("").replace(/\s+/g, "")).toBe(
+    "<ul><li>todo1</li><li>todo2</li><li>todo3</li></ul>"
+  );
 });
