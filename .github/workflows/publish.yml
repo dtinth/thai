@@ -17,6 +17,7 @@ jobs:
           - carify
           - html
           - get-or-create
+          - sql-storage
     steps:
       - uses: actions/checkout@v4
       - run: corepack enable
