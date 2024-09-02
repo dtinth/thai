@@ -15,6 +15,7 @@ jobs:
       matrix:
         package:
           - carify
+          - funny-json
           - html
           - get-or-create
           - sql-storage
