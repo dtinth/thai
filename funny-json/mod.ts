@@ -12,6 +12,9 @@ export function stringify(
   // Put opening brace on the same line as the comma
   result = result.replace(/,\t\n[\t]*([\[\{])/g, ",\t$1");
 
+  // Put opening brace on the same line as the array opening
+  result = result.replace(/\[\t\n[\t]*([\[\{])/g, "[\t$1");
+
   // Put the opening brace on the same line as the first key.
   result = result.replace(/([\[\{])\n\s*/g, "$1\t");
 

@@ -33,8 +33,7 @@ exports[`stringifies JSON with comma-first styling 1`] = `
 		]
 	]
 ,	"arrayWithObjects":
-	[	
-		{	"name": "Alice"
+	[	{	"name": "Alice"
 		,	"age": 30
 		}
 	,	{	"name": "Bob"
@@ -80,8 +79,7 @@ exports[`stringifies JSON with comma-first styling 1`] = `
 			}
 		}
 	,	"contact":
-		[	
-			{	"type": "email"
+		[	{	"type": "email"
 			,	"value": "john.doe@example.com"
 			}
 		,	{	"type": "phone"
