@@ -6,11 +6,12 @@ Key benefits:
 
 - Familiar localStorage-like API
 - Persistence across application restarts
-- Ability to share storage between multiple Bun processes using the same SQLite database file
+- Ability to share storage between multiple Bun/Node.js processes using the same SQLite database file
 
 Limitations:
 
 - Unlike Node.js or Deno’s implementation that has a storage limit similar to browser’s (10 MB), this library does not enforce any limit on the amount of data that can be stored.
+- While [Node.js’s implementation also uses SQLite under the hood](https://github.com/nodejs/node/blob/main/src/node_webstorage.cc), the database schema is different, so the storage files are not compatible between the two implementations.
 
 ## Usage
 
