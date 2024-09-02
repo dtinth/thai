@@ -26,6 +26,13 @@ import { createSqlStorage } from "@thai/sql-storage";
 // or use ":memory:" for an in-memory database.
 const db = new Database("storage.db");
 
+// Enable WAL mode for better performance, but see caveats at
+// <https://www.sqlite.org/wal.html>.
+db.exec("PRAGMA journal_mode = WAL");
+
+// To avoid "SQLiteError: database is locked", set a busy_timeout.
+db.exec("PRAGMA busy_timeout = 3000");
+
 // Create a storage object
 const storage = createSqlStorage(db);
 ```
@@ -41,6 +48,13 @@ import { createSqlStorage } from "@thai/sql-storage";
 // Use a path to a file to persist the storage,
 // or use ":memory:" for an in-memory database.
 const db = new DatabaseSync("storage.db");
+
+// Enable WAL mode for better performance, but see caveats at
+// <https://www.sqlite.org/wal.html>.
+db.exec("PRAGMA journal_mode = WAL");
+
+// To avoid "[ERR_SQLITE_ERROR] database is locked", set a busy_timeout.
+db.exec("PRAGMA busy_timeout = 3000");
 
 // Create a storage object
 const storage = createSqlStorage(db);
