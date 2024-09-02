@@ -12,7 +12,7 @@ Limitations:
 
 - Unlike Node.js or Deno’s implementation that has a storage limit similar to browser’s (10 MB), this library does not enforce any limit on the amount of data that can be stored.
 
-## Usage
+## Usage in Bun
 
 ```typescript
 import { Database } from "bun:sqlite";

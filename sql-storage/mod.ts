@@ -1,10 +1,18 @@
 /**
  * A Database object from `bun:sqlite`.
  */
-export type SqlDatabaseInput = BunDatabase;
+export type SqlDatabaseInput = BunDatabase | NodeDatabase;
 
 interface BunDatabase {
   query(sql: string): {
+    get(...params: any[]): any;
+    all(...params: any[]): any[];
+    run(...params: any[]): void;
+  };
+}
+
+interface NodeDatabase {
+  prepare(sql: string): {
     get(...params: any[]): any;
     all(...params: any[]): any[];
     run(...params: any[]): void;
@@ -21,7 +29,6 @@ interface SqlDatabase {
   };
 }
 
-const kGetProxy = Symbol("getProxy");
 const kDb = Symbol("db");
 const kProxy = Symbol("proxy");
 
@@ -151,5 +158,24 @@ export function createSqlStorage(db: SqlDatabaseInput): Storage {
 }
 
 function adapt(db: SqlDatabaseInput): SqlDatabase {
+  // Node.js SQLite does not have a `query` method but has a `prepare` method.
+  if (!("query" in db) && "prepare" in db) {
+    return adaptNode(db);
+  }
+
   return db;
+}
+
+function adaptNode(db: NodeDatabase): SqlDatabase {
+  const statementCache = new Map<string, ReturnType<NodeDatabase["prepare"]>>();
+  return {
+    query(sql: string) {
+      let statement = statementCache.get(sql);
+      if (!statement) {
+        statement = db.prepare(sql);
+        statementCache.set(sql, statement);
+      }
+      return statement;
+    },
+  };
 }

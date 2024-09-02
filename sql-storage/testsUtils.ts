@@ -1,4 +1,4 @@
-import { createSqlStorage, SqlDatabaseInput } from "./mod.ts";
+import { createSqlStorage, type SqlDatabaseInput } from "./mod.ts";
 
 export interface TestCase {
   name: string;
