@@ -12,20 +12,44 @@ Limitations:
 
 - Unlike Node.js or Deno’s implementation that has a storage limit similar to browser’s (10 MB), this library does not enforce any limit on the amount of data that can be stored.
 
-## Usage in Bun
+## Usage
+
+### Creating the Database in Bun
 
 ```typescript
 import { Database } from "bun:sqlite";
 import { createSqlStorage } from "@thai/sql-storage";
 
-// Create a SQLite database
+// Create a SQLite database.
 // Use a path to a file to persist the storage,
 // or use ":memory:" for an in-memory database.
 const db = new Database("storage.db");
 
 // Create a storage object
 const storage = createSqlStorage(db);
+```
 
+### Creating the Database in Node.js (v22.5.0+)
+
+```typescript
+import { DatabaseSync } from "node:sqlite";
+import { createSqlStorage } from "@thai/sql-storage";
+
+// Create a SQLite database.
+// Ensure you're running Node.js with the `--experimental-sqlite` flag.
+// Use a path to a file to persist the storage,
+// or use ":memory:" for an in-memory database.
+const db = new DatabaseSync("storage.db");
+
+// Create a storage object
+const storage = createSqlStorage(db);
+```
+
+### Using the Storage
+
+Once you have created the storage object, you can use it like a localStorage object:
+
+```typescript
 // Use it like localStorage
 storage.foo = "value";
 storage.bar = "another value";
@@ -36,10 +60,19 @@ console.log(storage.bar);
 console.log(storage.length);
 
 // Remove an item
-storage.removeItem("key");
+storage.removeItem("foo");
 
 // Clear all items
 storage.clear();
+
+// You can also use the traditional methods
+storage.setItem("key", "value");
+console.log(storage.getItem("key"));
+
+// Iterate over all items
+for (const [key, value] of storage) {
+  console.log(key, value);
+}
 ```
 
 ## API
