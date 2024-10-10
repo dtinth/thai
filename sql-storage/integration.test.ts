@@ -8,6 +8,10 @@ Deno.test("bun", async () => {
 
 Deno.test("node", async () => {
   execSync("mise install", { stdio: "inherit", cwd: "tests-node" });
+  execSync("mise exec -- corepack enable", {
+    stdio: "inherit",
+    cwd: "tests-node",
+  });
   execSync("mise exec -- pnpm install", {
     stdio: "inherit",
     cwd: "tests-node",
