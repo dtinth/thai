@@ -1,0 +1,38 @@
+name: CI/CD
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  cicd:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    strategy:
+      matrix:
+        package:
+          - carify
+          - funny-json
+          - get-or-create
+          - html
+          - sql-storage
+    steps:
+      - uses: actions/checkout@v4
+      - uses: jdx/mise-action@v2
+      - run: deno
+        if: github.event_name != 'push'
+        working-directory: ${{ matrix.package }}
+      - run: deno test -A
+        working-directory: ${{ matrix.package }}
+      - run: deno publish --dry-run
+        if: github.event_name != 'push'
+        working-directory: ${{ matrix.package }}
+      - run: deno publish
+        if: github.event_name == 'push'
+        working-directory: ${{ matrix.package }}

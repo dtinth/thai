@@ -1,5 +1,7 @@
-import { expect, it } from "vitest";
-import { html, renderHtml, renderHtmlAsync, renderHtmlStream } from "./html";
+import { expect } from "@std/expect";
+import { html, renderHtml, renderHtmlAsync, renderHtmlStream } from "./html.ts";
+
+const it = Deno.test;
 
 it("converts strings", async () => {
   expect(renderHtml("meow")).toBe("meow");

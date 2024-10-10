@@ -1,0 +1,9 @@
+{
+  "name": "@thai/sql-storage",
+  "version": "0.0.3-alpha.0",
+  "license": "MIT",
+  "exports": "./mod.ts",
+  "test": {
+    "exclude": ["tests-bun/**", "tests-node/**"]
+  }
+}

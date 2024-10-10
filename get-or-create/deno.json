@@ -1,0 +1,6 @@
+{
+  "name": "@thai/get-or-create",
+  "version": "0.0.5-alpha.0",
+  "license": "MIT",
+  "exports": "./mod.ts"
+}

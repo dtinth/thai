@@ -1,5 +1,7 @@
-import { expect, it } from "vitest";
-import { getOrCreate } from "./mod";
+import { expect } from "@std/expect";
+import { getOrCreate } from "./mod.ts";
+
+const it = Deno.test;
 
 it("returns existing value if key exists in the map", async () => {
   const map = new Map<string, number>();

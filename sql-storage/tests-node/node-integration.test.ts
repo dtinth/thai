@@ -2,7 +2,7 @@
 import assert from "node:assert";
 import { DatabaseSync } from "node:sqlite";
 import test, { describe } from "node:test";
-import { testCases } from "./testsUtils.ts";
+import { testCases } from "../testsUtils.ts";
 
 describe("SqlStorage", () => {
   for (const testCase of testCases) {

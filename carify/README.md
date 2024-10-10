@@ -19,7 +19,9 @@ for await (const chunk of result.createCarStream()) {
 }
 
 // ...or convert them to ArrayBuffer like this:
-const arrayBuffer = await new Response(result.createCarStream()).arrayBuffer();
+const arrayBuffer = await new Blob(
+  await Array.fromAsync(result.createCarStream())
+).arrayBuffer();
 
 // ...or convert them to Node.js ReadableStream like this:
 import { Readable } from "stream";

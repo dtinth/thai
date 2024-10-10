@@ -1,0 +1,7 @@
+{
+  "devDependencies": {
+    "@tsconfig/bun": "^1.0.7",
+    "@types/bun": "^1.1.11"
+  },
+  "type": "module"
+}

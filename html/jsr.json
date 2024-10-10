@@ -1,8 +1,0 @@
-{
-  "name": "@thai/html",
-  "version": "0.1.0-alpha.0",
-  "license": "MIT",
-  "exports": {
-    ".": "./html.ts"
-  }
-}
