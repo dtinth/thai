@@ -1,7 +1,9 @@
-import { expect, it } from "vitest";
-import { stringify } from "./mod";
+import { assertSnapshot } from "@std/testing/snapshot";
+import { stringify } from "./mod.ts";
 
-it("stringifies JSON with comma-first styling", async () => {
+const it = Deno.test;
+
+it("stringifies JSON with comma-first styling", async (t) => {
   const object = {
     emptyString: "",
     nonEmptyString: "Hello, world!",
@@ -59,5 +61,5 @@ it("stringifies JSON with comma-first styling", async () => {
     emptyObject: {},
   };
   const result = stringify(object);
-  expect(result).toMatchSnapshot();
+  await assertSnapshot(t, result);
 });

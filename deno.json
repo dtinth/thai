@@ -1,0 +1,18 @@
+{
+  "workspace": [
+    "./carify",
+    "./html",
+    "./funny-json",
+    "./get-or-create",
+    "./sql-storage"
+  ],
+  "imports": {
+    "@std/expect": "jsr:@std/expect@^1.0.5",
+    "@std/testing": "jsr:@std/testing@^1.0.3"
+  },
+  "lint": {
+    "rules": {
+      "exclude": ["require-await"]
+    }
+  }
+}

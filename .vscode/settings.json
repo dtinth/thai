@@ -1,0 +1,4 @@
+{
+  "deno.enable": true,
+  "deno.disablePaths": ["./sql-storage/tests-bun", "./sql-storage/tests-node"]
+}

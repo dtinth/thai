@@ -1,5 +1,7 @@
-import { expect, it } from "vitest";
+import { expect } from "@std/expect";
 import { carify } from "./mod.ts";
+
+const it = Deno.test;
 
 const testData = new TextEncoder().encode(
   `<meta http-equiv="refresh" content="0; url=https://youtu.be/dQw4w9WgXcQ" />\n`
@@ -12,7 +14,9 @@ it("should generate a car file", async () => {
   );
 
   const carStream = result.createCarStream();
-  const carBuffer = await new Response(carStream as any).arrayBuffer();
+  const carBuffer = await new Blob(
+    await Array.fromAsync(carStream)
+  ).arrayBuffer();
   const carHash = await crypto.subtle.digest("SHA-1", carBuffer);
 
   const carHashHex = Array.from(new Uint8Array(carHash))

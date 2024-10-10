@@ -1,7 +1,7 @@
-// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+export const snapshot = {};
 
-exports[`stringifies JSON with comma-first styling 1`] = `
-"
+snapshot[`stringifies JSON with comma-first styling 1`] = `
+'
 {	"emptyString": ""
 ,	"nonEmptyString": "Hello, world!"
 ,	"number": 42
@@ -89,5 +89,5 @@ exports[`stringifies JSON with comma-first styling 1`] = `
 	,	"active": true
 	}
 ,	"emptyObject": {}
-}"
+}'
 `;

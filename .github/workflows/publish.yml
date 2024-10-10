@@ -1,7 +1,10 @@
-name: Publish
+name: Test and publish
 
 on:
   push:
+    branches:
+      - main
+  pull_request:
     branches:
       - main
 
@@ -16,13 +19,20 @@ jobs:
         package:
           - carify
           - funny-json
-          - html
           - get-or-create
+          - html
           - sql-storage
     steps:
       - uses: actions/checkout@v4
-      - run: corepack enable
-      - run: pnpm install
+      - uses: jdx/mise-action@v2
+      - run: deno
+        if: github.event_name != 'push'
         working-directory: ${{ matrix.package }}
-      - run: pnpx jsr publish
+      - run: deno test -A
+        working-directory: ${{ matrix.package }}
+      - run: deno publish --dry-run
+        if: github.event_name != 'push'
+        working-directory: ${{ matrix.package }}
+      - run: deno publish
+        if: github.event_name == 'push'
         working-directory: ${{ matrix.package }}

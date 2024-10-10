@@ -1,6 +1,6 @@
 import { Database } from "bun:sqlite";
 import { describe, expect, test } from "bun:test";
-import { testCases } from "./testsUtils";
+import { testCases } from "../testsUtils";
 
 describe("SqlStorage", () => {
   for (const testCase of testCases) {
