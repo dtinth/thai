@@ -1,6 +1,6 @@
 {
   "name": "@thai/funny-json",
-  "version": "0.0.2",
+  "version": "0.0.3-alpha.0",
   "license": "MIT",
   "exports": "./mod.ts"
 }
