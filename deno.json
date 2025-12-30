@@ -7,12 +7,18 @@
     "./sql-storage"
   ],
   "imports": {
-    "@std/expect": "jsr:@std/expect@^1.0.5",
-    "@std/testing": "jsr:@std/testing@^1.0.3"
+    "@std/expect": "https://deno.land/std@0.224.0/expect/mod.ts",
+    "@std/testing": "https://deno.land/std@0.224.0/testing/mod.ts",
+    "@std/testing/snapshot": "https://deno.land/std@0.224.0/testing/snapshot.ts",
+    "@std/testing/": "https://deno.land/std@0.224.0/testing/"
   },
   "lint": {
     "rules": {
       "exclude": ["require-await"]
     }
+  },
+  "test": {
+    // text-cleaner uses bun:test and is run separately with Bun
+    "exclude": ["text-cleaner/**"]
   }
 }
