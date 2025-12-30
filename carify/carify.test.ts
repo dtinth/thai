@@ -13,10 +13,12 @@ it("should generate a car file", async () => {
     "bafybeignkhelrt2ndg57sn7elg5eiaqkdtytrndjsutunlq6ye5unstnla"
   );
 
-  const carStream = result.createCarStream();
-  const carBuffer = await new Blob(
-    await Array.fromAsync(carStream)
-  ).arrayBuffer();
+  const carStream = result.createCarStream() as AsyncIterable<Uint8Array>;
+  const carParts: ArrayBuffer[] = [];
+  for await (const chunk of carStream) {
+    carParts.push(chunk.slice().buffer);
+  }
+  const carBuffer = await new Blob(carParts).arrayBuffer();
   const carHash = await crypto.subtle.digest("SHA-1", carBuffer);
 
   const carHashHex = Array.from(new Uint8Array(carHash))
