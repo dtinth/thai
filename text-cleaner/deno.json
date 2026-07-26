@@ -2,5 +2,8 @@
   "name": "@thai/text-cleaner",
   "version": "0.0.1",
   "license": "MIT",
-  "exports": "./mod.ts"
+  "exports": "./mod.ts",
+  "publish": {
+    "exclude": ["version.txt"]
+  }
 }
