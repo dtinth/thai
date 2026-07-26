@@ -1,12 +1,17 @@
 {
   "name": "@thai/html",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "license": "MIT",
   "exports": "./html.ts",
   "imports": {
     "lodash-es": "npm:lodash-es@^4.17.21"
   },
   "publish": {
-    "exclude": ["version.txt", "*.test.ts", "bun.lock", "package-lock.json"]
+    "exclude": [
+      "version.txt",
+      "*.test.ts",
+      "bun.lock",
+      "package-lock.json"
+    ]
   }
 }

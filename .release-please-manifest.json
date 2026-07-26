@@ -2,7 +2,7 @@
   "carify": "0.0.5",
   "funny-json": "0.0.3",
   "get-or-create": "0.0.5",
-  "html": "0.1.1",
+  "html": "0.1.2",
   "sql-storage": "0.0.5",
   "text-cleaner": "0.0.1"
 }
