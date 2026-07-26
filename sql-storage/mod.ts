@@ -5,27 +5,27 @@ export type SqlDatabaseInput = BunDatabase | NodeDatabase;
 
 interface BunDatabase {
   query(sql: string): {
-    get(...params: any[]): any;
-    all(...params: any[]): any[];
-    run(...params: any[]): void;
+    get(...params: unknown[]): unknown;
+    all(...params: unknown[]): unknown[];
+    run(...params: unknown[]): void;
   };
 }
 
 interface NodeDatabase {
   prepare(sql: string): {
-    get(...params: any[]): any;
-    all(...params: any[]): any[];
-    run(...params: any[]): void;
+    get(...params: unknown[]): unknown;
+    all(...params: unknown[]): unknown[];
+    run(...params: unknown[]): void;
   };
 }
 
 interface SqlDatabase {
-  query<T = any>(
+  query<T = unknown>(
     sql: string
   ): {
-    get(params?: Record<string, any>): T;
-    all(params?: Record<string, any>): T[];
-    run(params?: Record<string, any>): void;
+    get(params?: Record<string, unknown>): T;
+    all(params?: Record<string, unknown>): T[];
+    run(params?: Record<string, unknown>): void;
   };
 }
 
@@ -45,7 +45,7 @@ export class SqlStorage implements Storage {
     this[kProxy] = new Proxy(this, {
       get(target, prop) {
         if (prop in target || typeof prop === "symbol") {
-          return (target as any)[prop];
+          return Reflect.get(target, prop);
         }
         return target.getItem(prop.toString());
       },
@@ -62,12 +62,12 @@ export class SqlStorage implements Storage {
       },
       has(target, prop) {
         return (
-          target.hasOwnProperty(prop) ||
+          Object.prototype.hasOwnProperty.call(target, prop) ||
           target.getItem(prop.toString()) !== null
         );
       },
       getOwnPropertyDescriptor(target, prop) {
-        if (target.hasOwnProperty(prop)) {
+        if (Object.prototype.hasOwnProperty.call(target, prop)) {
           return Object.getOwnPropertyDescriptor(target, prop);
         }
         if (target.getItem(prop.toString()) !== null) {
@@ -163,7 +163,10 @@ function adapt(db: SqlDatabaseInput): SqlDatabase {
     return adaptNode(db);
   }
 
-  return db;
+  // The database driver doesn't know the caller-chosen `T`; it's the
+  // caller's responsibility to pass a query that matches the shape they ask
+  // `SqlDatabase.query<T>` for.
+  return db as SqlDatabase;
 }
 
 function adaptNode(db: NodeDatabase): SqlDatabase {
@@ -177,5 +180,5 @@ function adaptNode(db: NodeDatabase): SqlDatabase {
       }
       return statement;
     },
-  };
+  } as SqlDatabase;
 }

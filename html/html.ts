@@ -69,7 +69,7 @@ class HtmlHypertext implements HtmlGenerator {
 
 class HtmlPromise implements HtmlGenerator {
   constructor(private nodePromise: PromiseLike<HtmlGenerator>) {}
-  *generateSync() {
+  generateSync(): Iterable<string> {
     throw new Error(
       "Asynchronous value (Promise) cannot be rendered synchronously"
     );
@@ -96,7 +96,7 @@ class HtmlIterable implements HtmlGenerator {
 
 class HtmlAsyncIterable implements HtmlGenerator {
   constructor(private asyncIterable: AsyncIterable<HtmlGenerator>) {}
-  *generateSync() {
+  generateSync(): Iterable<string> {
     throw new Error(
       "Asynchronous value (AsyncIterable) cannot be rendered synchronously"
     );
@@ -108,19 +108,34 @@ class HtmlAsyncIterable implements HtmlGenerator {
   }
 }
 
-function isPromiseLike(x: any): x is PromiseLike<any> {
-  return x && typeof x.then === "function";
+function isPromiseLike(x: Html): x is PromiseLike<Html> {
+  return (
+    typeof x === "object" &&
+    x !== null &&
+    typeof (x as { then?: unknown }).then === "function"
+  );
 }
 
-function isIterable(x: any): x is Iterable<any> {
-  return x && typeof x[Symbol.iterator] === "function";
+function isIterable(x: Html): x is Iterable<Html> {
+  return (
+    typeof x === "object" &&
+    x !== null &&
+    typeof (x as { [Symbol.iterator]?: unknown })[Symbol.iterator] ===
+      "function"
+  );
 }
 
-function isAsyncIterable(x: any): x is AsyncIterable<any> {
-  return x && typeof x[Symbol.asyncIterator] === "function";
+function isAsyncIterable(x: Html): x is AsyncIterable<Html> {
+  return (
+    typeof x === "object" &&
+    x !== null &&
+    typeof (x as { [Symbol.asyncIterator]?: unknown })[
+      Symbol.asyncIterator
+    ] === "function"
+  );
 }
 
-function toHtmlGenerator(html: any): HtmlGenerator {
+function toHtmlGenerator(html: Html): HtmlGenerator {
   if (Array.isArray(html)) {
     return new HtmlArray(html.map((x) => toHtmlGenerator(x)));
   } else if (typeof html === "string") {
@@ -147,7 +162,7 @@ function toHtmlGenerator(html: any): HtmlGenerator {
         }
       },
     });
-  } else if (html.__html) {
+  } else if (typeof html === "object" && html.__html) {
     return new HtmlCode(html.__html);
   } else {
     return new HtmlCode(escape(String(html)));
@@ -163,7 +178,7 @@ function toHtmlGenerator(html: any): HtmlGenerator {
  */
 export function html(
   strings: TemplateStringsArray,
-  ...values: any[]
+  ...values: Html[]
 ): Hypertext {
   const htmlGenerator = new HtmlTemplate(
     strings,
@@ -191,7 +206,7 @@ export class Hypertext {
    * If the value is `null` or `undefined`, it is converted to an empty string.
    * Otherwise, it is converted to a string and escaped.
    */
-  static from(html: any): Hypertext {
+  static from(html: Html): Hypertext {
     return new Hypertext(toHtmlGenerator(html));
   }
 
@@ -231,6 +246,8 @@ export type Html =
   | string
   | number
   | boolean
+  | null
+  | undefined
   | Html[]
   | PromiseLike<Html>
   | Iterable<Html>

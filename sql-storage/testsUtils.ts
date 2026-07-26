@@ -7,8 +7,8 @@ export interface TestCase {
 
 export interface TestHarness {
   createDb: () => SqlDatabaseInput;
-  assertEquals: (actual: any, expected: any) => void;
-  assertNull: (value: any) => void;
+  assertEquals: (actual: unknown, expected: unknown) => void;
+  assertNull: (value: unknown) => void;
 }
 
 export const testCases: TestCase[] = [
