@@ -1,0 +1,43 @@
+{
+  "$schema": "https://raw.githubusercontent.com/googleapis/release-please/main/schemas/config.json",
+  "release-type": "simple",
+  "include-component-in-tag": true,
+  "packages": {
+    "carify": {
+      "bootstrap-sha": "7b92631e5a8a7b1008034c761c7e2888a12db240",
+      "extra-files": [
+        { "type": "json", "path": "deno.json", "jsonpath": "$.version" }
+      ]
+    },
+    "funny-json": {
+      "bootstrap-sha": "7b92631e5a8a7b1008034c761c7e2888a12db240",
+      "extra-files": [
+        { "type": "json", "path": "deno.json", "jsonpath": "$.version" }
+      ]
+    },
+    "get-or-create": {
+      "bootstrap-sha": "7b92631e5a8a7b1008034c761c7e2888a12db240",
+      "extra-files": [
+        { "type": "json", "path": "deno.json", "jsonpath": "$.version" }
+      ]
+    },
+    "html": {
+      "bootstrap-sha": "7b92631e5a8a7b1008034c761c7e2888a12db240",
+      "extra-files": [
+        { "type": "json", "path": "deno.json", "jsonpath": "$.version" }
+      ]
+    },
+    "sql-storage": {
+      "bootstrap-sha": "7b92631e5a8a7b1008034c761c7e2888a12db240",
+      "extra-files": [
+        { "type": "json", "path": "deno.json", "jsonpath": "$.version" }
+      ]
+    },
+    "text-cleaner": {
+      "bootstrap-sha": "7b92631e5a8a7b1008034c761c7e2888a12db240",
+      "extra-files": [
+        { "type": "json", "path": "deno.json", "jsonpath": "$.version" }
+      ]
+    }
+  }
+}
