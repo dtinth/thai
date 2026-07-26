@@ -27,10 +27,18 @@ jobs:
     steps:
       - uses: actions/checkout@v7
       - uses: jdx/mise-action@v4
+        with:
+          working_directory: ${{ matrix.package }}
       - run: deno
         if: github.event_name != 'push'
         working-directory: ${{ matrix.package }}
       - run: deno test -A
+        working-directory: ${{ matrix.package }}
+      - run: bun test mod.test.ts
+        if: matrix.package == 'sql-storage'
+        working-directory: ${{ matrix.package }}
+      - run: node --test mod.test.ts
+        if: matrix.package == 'sql-storage'
         working-directory: ${{ matrix.package }}
       - run: deno publish --dry-run
         if: github.event_name != 'push'
