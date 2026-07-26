@@ -1,9 +1,8 @@
-import { expect } from "@std/expect";
+import { test } from "node:test";
+import assert from "node:assert/strict";
 import { getOrCreate } from "./mod.ts";
 
-const it = Deno.test;
-
-it("returns existing value if key exists in the map", async () => {
+test("returns existing value if key exists in the map", () => {
   const map = new Map<string, number>();
   map.set("foo", 42);
 
@@ -11,32 +10,32 @@ it("returns existing value if key exists in the map", async () => {
     throw new Error("Should not be called");
   });
 
-  expect(result).toBe(42);
+  assert.equal(result, 42);
 });
 
-it("creates and returns new value if key does not exist in the map", async () => {
+test("creates and returns new value if key does not exist in the map", () => {
   const map = new Map<string, number>();
 
   const result = getOrCreate(map, "foo", (key) => {
-    expect(key).toBe("foo");
+    assert.equal(key, "foo");
     return 42;
   });
 
-  expect(result).toBe(42);
-  expect(map.get("foo")).toBe(42);
+  assert.equal(result, 42);
+  assert.equal(map.get("foo"), 42);
 });
 
-it("also works with a WeakMap", async () => {
+test("also works with a WeakMap", () => {
   const map = new WeakMap<{ x: number }, [number]>();
   const keyA = { x: 1 };
   const keyB = { x: 2 };
   const factory = (v: { x: number }): [number] => [v.x];
 
   // check result
-  expect(getOrCreate(map, keyA, factory)[0]).toBe(1);
-  expect(getOrCreate(map, keyB, factory)[0]).toBe(2);
+  assert.equal(getOrCreate(map, keyA, factory)[0], 1);
+  assert.equal(getOrCreate(map, keyB, factory)[0], 2);
 
   // check identity
-  expect(getOrCreate(map, keyA, factory)).toBe(getOrCreate(map, keyA, factory));
-  expect(getOrCreate(map, keyB, factory)).toBe(getOrCreate(map, keyB, factory));
+  assert.equal(getOrCreate(map, keyA, factory), getOrCreate(map, keyA, factory));
+  assert.equal(getOrCreate(map, keyB, factory), getOrCreate(map, keyB, factory));
 });

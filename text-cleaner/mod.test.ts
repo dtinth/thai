@@ -1,4 +1,5 @@
-import { expect } from "@std/expect";
+import { test } from "node:test";
+import assert from "node:assert/strict";
 import { normalizeThaiText } from "./mod.ts";
 
 const tests = [
@@ -133,9 +134,8 @@ const tests = [
   },
 ];
 
-for (const test of tests) {
-  Deno.test(test.name, () => {
-    const output = normalizeThaiText(test.input);
-    expect(output).toBe(test.expected);
+for (const { name, input, expected } of tests) {
+  test(name, () => {
+    assert.equal(normalizeThaiText(input), expected);
   });
 }

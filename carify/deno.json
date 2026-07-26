@@ -4,6 +4,11 @@
   "license": "MIT",
   "exports": "./mod.ts",
   "publish": {
-    "exclude": ["version.txt"]
+    "exclude": [
+      "version.txt",
+      "*.test.ts",
+      "bun.lock",
+      "package-lock.json"
+    ]
   }
 }

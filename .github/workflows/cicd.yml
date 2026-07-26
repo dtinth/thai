@@ -34,11 +34,15 @@ jobs:
         working-directory: ${{ matrix.package }}
       - run: deno test -A
         working-directory: ${{ matrix.package }}
-      - run: bun test mod.test.ts
-        if: matrix.package == 'sql-storage'
+      - run: bun install --frozen-lockfile
+        if: hashFiles(format('{0}/package.json', matrix.package)) != ''
         working-directory: ${{ matrix.package }}
-      - run: node --test mod.test.ts
-        if: matrix.package == 'sql-storage'
+      - run: npm ci
+        if: hashFiles(format('{0}/package.json', matrix.package)) != ''
+        working-directory: ${{ matrix.package }}
+      - run: bun test
+        working-directory: ${{ matrix.package }}
+      - run: node --test
         working-directory: ${{ matrix.package }}
       - run: deno publish --dry-run
         if: github.event_name != 'push'

@@ -1,15 +1,15 @@
-import { expect } from "@std/expect";
+import { test } from "node:test";
+import assert from "node:assert/strict";
 import { carify } from "./mod.ts";
-
-const it = Deno.test;
 
 const testData = new TextEncoder().encode(
   `<meta http-equiv="refresh" content="0; url=https://youtu.be/dQw4w9WgXcQ" />\n`
 );
 
-it("should generate a car file", async () => {
+test("should generate a car file", async () => {
   const result = await carify(testData, "hello.html");
-  expect(result.cid).toBe(
+  assert.equal(
+    result.cid,
     "bafybeignkhelrt2ndg57sn7elg5eiaqkdtytrndjsutunlq6ye5unstnla"
   );
 
@@ -23,14 +23,15 @@ it("should generate a car file", async () => {
   const carHashHex = Array.from(new Uint8Array(carHash))
     .map((b) => b.toString(16).padStart(2, "0"))
     .join("");
-  expect(carHashHex).toBe("3ccadd74afbac9e1295b6a94ad4ff062169ab638");
+  assert.equal(carHashHex, "3ccadd74afbac9e1295b6a94ad4ff062169ab638");
 });
 
-it("should generate a car for empty file", async () => {
+test("should generate a car for empty file", async () => {
   const emptyFile = new Uint8Array();
   const filename = "empty.txt";
   const result = await carify(emptyFile, filename);
-  expect(result.cid).toBe(
+  assert.equal(
+    result.cid,
     "bafybeid76eyswbhp3f7zrgvkelbpsyoqoa4qzprhraibj6y7cvi7oh2bzq"
   );
 });

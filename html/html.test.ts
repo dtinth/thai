@@ -1,75 +1,75 @@
-import { expect } from "@std/expect";
+import { test } from "node:test";
+import assert from "node:assert/strict";
 import { html, renderHtml, renderHtmlAsync, renderHtmlStream } from "./html.ts";
 
-const it = Deno.test;
-
-it("converts strings", async () => {
-  expect(renderHtml("meow")).toBe("meow");
+test("converts strings", () => {
+  assert.equal(renderHtml("meow"), "meow");
 });
 
-it("converts numbers", async () => {
-  expect(renderHtml(42)).toBe("42");
+test("converts numbers", () => {
+  assert.equal(renderHtml(42), "42");
 });
 
-it("converts booleans", async () => {
-  expect(renderHtml(true)).toBe("true");
-  expect(renderHtml(false)).toBe("false");
+test("converts booleans", () => {
+  assert.equal(renderHtml(true), "true");
+  assert.equal(renderHtml(false), "false");
 });
 
-it("escapes strings", async () => {
-  expect(renderHtml("<b>")).toBe("&lt;b&gt;");
+test("escapes strings", () => {
+  assert.equal(renderHtml("<b>"), "&lt;b&gt;");
 });
 
-it("does not escape tagged hypertext", async () => {
-  expect(renderHtml(html`<br />`)).toBe("<br />");
+test("does not escape tagged hypertext", () => {
+  assert.equal(renderHtml(html`<br />`), "<br />");
 });
 
-it("concatenates arrays", async () => {
-  expect(renderHtml(["one", "two", "three"])).toBe("onetwothree");
+test("concatenates arrays", () => {
+  assert.equal(renderHtml(["one", "two", "three"]), "onetwothree");
 });
 
-it("escapes interpolated values", async () => {
-  expect(renderHtml(html`<${"<>"}></${"<>"}>`)).toBe("<&lt;&gt;></&lt;&gt;>");
+test("escapes interpolated values", () => {
+  assert.equal(renderHtml(html`<${"<>"}></${"<>"}>`), "<&lt;&gt;></&lt;&gt;>");
 });
 
-it("renders null as an empty string", async () => {
-  expect(renderHtml(html`${null}`)).toBe("");
+test("renders null as an empty string", () => {
+  assert.equal(renderHtml(html`${null}`), "");
 });
 
-it("renders undefined as an empty string", async () => {
-  expect(renderHtml(html`${undefined}`)).toBe("");
+test("renders undefined as an empty string", () => {
+  assert.equal(renderHtml(html`${undefined}`), "");
 });
 
-it("keeps hypertext as is", async () => {
+test("keeps hypertext as is", () => {
   const a = html`<>`;
-  expect(renderHtml(html`${a}`)).toBe("<>");
+  assert.equal(renderHtml(html`${a}`), "<>");
 });
 
-it("renders __html properties as is", async () => {
-  expect(renderHtml({ __html: "<>" })).toBe("<>");
+test("renders __html properties as is", () => {
+  assert.equal(renderHtml({ __html: "<>" }), "<>");
 });
 
-it("renders promise", async () => {
-  expect(await renderHtmlAsync(html`x = ${Promise.resolve(42)}`)).toBe(
+test("renders promise", async () => {
+  assert.equal(
+    await renderHtmlAsync(html`x = ${Promise.resolve(42)}`),
     "x = 42"
   );
 });
 
-it("renders generator", async () => {
+test("renders generator", async () => {
   function* stuff() {
     yield 42;
   }
-  expect(await renderHtmlAsync(html`x = ${stuff()}`)).toBe("x = 42");
+  assert.equal(await renderHtmlAsync(html`x = ${stuff()}`), "x = 42");
 });
 
-it("renders async generator", async () => {
+test("renders async generator", async () => {
   async function* stuff() {
     yield 42;
   }
-  expect(await renderHtmlAsync(html`x = ${stuff()}`)).toBe("x = 42");
+  assert.equal(await renderHtmlAsync(html`x = ${stuff()}`), "x = 42");
 });
 
-it("streams", async () => {
+test("streams", async () => {
   async function loadTodoIds() {
     return ["todo1", "todo2", "todo3"];
   }
@@ -88,7 +88,8 @@ it("streams", async () => {
   )) {
     parts.push(part);
   }
-  expect(parts.join("").replace(/\s+/g, "")).toBe(
+  assert.equal(
+    parts.join("").replace(/\s+/g, ""),
     "<ul><li>todo1</li><li>todo2</li><li>todo3</li></ul>"
   );
 });

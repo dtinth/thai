@@ -1,5 +1,5 @@
 {
-  "version": "4",
+  "version": "5",
   "specifiers": {
     "jsr:@std/assert@^1.0.6": "1.0.6",
     "jsr:@std/data-structures@^1.0.4": "1.0.4",
@@ -378,7 +378,8 @@
       ]
     },
     "cborg@4.2.4": {
-      "integrity": "sha512-ns2xY95zViHIVy4lq+qdLmfXTpnT3XjmKradz4RJxxbr5jc/A5gS5FiFLcPGhSdHVlSeeoizT1fuKdI1Kcd6oA=="
+      "integrity": "sha512-ns2xY95zViHIVy4lq+qdLmfXTpnT3XjmKradz4RJxxbr5jc/A5gS5FiFLcPGhSdHVlSeeoizT1fuKdI1Kcd6oA==",
+      "bin": true
     },
     "datastore-core@9.2.9": {
       "integrity": "sha512-wraWTPsbtdE7FFaVo3pwPuTB/zXsgwGGAm8BgBYwYAuzZCTS0MfXmd/HH1vR9s0/NFFjOVmBkGiWCvKxZ+QjVw==",
@@ -739,7 +740,8 @@
         "minimist",
         "node-fetch",
         "readable-stream"
-      ]
+      ],
+      "bin": true
     },
     "race-event@1.3.0": {
       "integrity": "sha512-kaLm7axfOnahIqD3jQ4l1e471FIFcEGebXEnhxyLscuUzV8C94xVHtWEqDDXxll7+yu/6lW0w1Ff4HbtvHvOHg=="
@@ -858,7 +860,12 @@
       "html": {
         "dependencies": [
           "npm:lodash-es@^4.17.21"
-        ]
+        ],
+        "packageJson": {
+          "dependencies": [
+            "npm:lodash-es@^4.17.21"
+          ]
+        }
       }
     }
   }

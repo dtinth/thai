@@ -7,6 +7,6 @@
     "lodash-es": "npm:lodash-es@^4.17.21"
   },
   "publish": {
-    "exclude": ["version.txt"]
+    "exclude": ["version.txt", "*.test.ts", "bun.lock", "package-lock.json"]
   }
 }
