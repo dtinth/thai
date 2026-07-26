@@ -4,7 +4,8 @@
     "./html",
     "./funny-json",
     "./get-or-create",
-    "./sql-storage"
+    "./sql-storage",
+    "./text-cleaner"
   ],
   "imports": {
     "@std/expect": "jsr:@std/expect@^1.0.5",

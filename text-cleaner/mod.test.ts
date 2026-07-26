@@ -1,4 +1,4 @@
-import { expect, it } from "bun:test";
+import { expect } from "@std/expect";
 import { normalizeThaiText } from "./mod.ts";
 
 const tests = [
@@ -134,7 +134,7 @@ const tests = [
 ];
 
 for (const test of tests) {
-  it(test.name, () => {
+  Deno.test(test.name, () => {
     const output = normalizeThaiText(test.input);
     expect(output).toBe(test.expected);
   });

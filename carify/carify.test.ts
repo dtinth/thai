@@ -14,8 +14,9 @@ it("should generate a car file", async () => {
   );
 
   const carStream = result.createCarStream();
+  const carChunks = await Array.fromAsync(carStream);
   const carBuffer = await new Blob(
-    await Array.fromAsync(carStream)
+    carChunks.map((chunk) => new Uint8Array(chunk))
   ).arrayBuffer();
   const carHash = await crypto.subtle.digest("SHA-1", carBuffer);
 

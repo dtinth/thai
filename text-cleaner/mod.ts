@@ -34,7 +34,7 @@ const THAI = {
 // All marks that float above/below consonants
 const FLOATING_MARKS = `${THAI.UPPER_VOWEL}${THAI.LOWER_VOWEL}${THAI.MAITAIKHU}${THAI.MAI_HAN_AKAT}${THAI.TONE}${THAI.NIKHAHIT}`;
 
-export function normalizeThaiText(text: string) {
+export function normalizeThaiText(text: string): string {
   // Process only runs of Thai characters
   return text.replace(/\p{Script=Thai}+/gu, (match) => {
     let result = match;
