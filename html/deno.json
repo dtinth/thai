@@ -5,5 +5,8 @@
   "exports": "./html.ts",
   "imports": {
     "lodash-es": "npm:lodash-es@^4.17.21"
+  },
+  "publish": {
+    "exclude": ["version.txt"]
   }
 }
