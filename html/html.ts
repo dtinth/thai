@@ -6,7 +6,10 @@ export interface HtmlGenerator {
 }
 
 class HtmlCode implements HtmlGenerator {
-  constructor(private html: string) {}
+  private html: string;
+  constructor(html: string) {
+    this.html = html;
+  }
   *generateSync() {
     yield this.html;
   }
@@ -21,10 +24,12 @@ class HtmlEmpty implements HtmlGenerator {
 }
 
 class HtmlTemplate implements HtmlGenerator {
-  constructor(
-    private strings: TemplateStringsArray,
-    private interpolations: HtmlGenerator[]
-  ) {}
+  private strings: TemplateStringsArray;
+  private interpolations: HtmlGenerator[];
+  constructor(strings: TemplateStringsArray, interpolations: HtmlGenerator[]) {
+    this.strings = strings;
+    this.interpolations = interpolations;
+  }
   *generateSync() {
     for (let i = 0; i < this.strings.length; i++) {
       yield this.strings[i];
@@ -44,7 +49,10 @@ class HtmlTemplate implements HtmlGenerator {
 }
 
 class HtmlArray implements HtmlGenerator {
-  constructor(private parts: HtmlGenerator[]) {}
+  private parts: HtmlGenerator[];
+  constructor(parts: HtmlGenerator[]) {
+    this.parts = parts;
+  }
   *generateSync() {
     for (const part of this.parts) {
       yield* part.generateSync();
@@ -58,7 +66,10 @@ class HtmlArray implements HtmlGenerator {
 }
 
 class HtmlHypertext implements HtmlGenerator {
-  constructor(private hypertext: Hypertext) {}
+  private hypertext: Hypertext;
+  constructor(hypertext: Hypertext) {
+    this.hypertext = hypertext;
+  }
   *generateSync() {
     yield this.hypertext.toHtml();
   }
@@ -68,7 +79,10 @@ class HtmlHypertext implements HtmlGenerator {
 }
 
 class HtmlPromise implements HtmlGenerator {
-  constructor(private nodePromise: PromiseLike<HtmlGenerator>) {}
+  private nodePromise: PromiseLike<HtmlGenerator>;
+  constructor(nodePromise: PromiseLike<HtmlGenerator>) {
+    this.nodePromise = nodePromise;
+  }
   generateSync(): Iterable<string> {
     throw new Error(
       "Asynchronous value (Promise) cannot be rendered synchronously"
@@ -81,7 +95,10 @@ class HtmlPromise implements HtmlGenerator {
 }
 
 class HtmlIterable implements HtmlGenerator {
-  constructor(private iterable: Iterable<HtmlGenerator>) {}
+  private iterable: Iterable<HtmlGenerator>;
+  constructor(iterable: Iterable<HtmlGenerator>) {
+    this.iterable = iterable;
+  }
   *generateSync() {
     for (const part of this.iterable) {
       yield* part.generateSync();
@@ -95,7 +112,10 @@ class HtmlIterable implements HtmlGenerator {
 }
 
 class HtmlAsyncIterable implements HtmlGenerator {
-  constructor(private asyncIterable: AsyncIterable<HtmlGenerator>) {}
+  private asyncIterable: AsyncIterable<HtmlGenerator>;
+  constructor(asyncIterable: AsyncIterable<HtmlGenerator>) {
+    this.asyncIterable = asyncIterable;
+  }
   generateSync(): Iterable<string> {
     throw new Error(
       "Asynchronous value (AsyncIterable) cannot be rendered synchronously"
@@ -192,10 +212,14 @@ export function html(
  * @public
  */
 export class Hypertext {
+  private htmlGenerator: HtmlGenerator;
+
   /**
    * @internal
    */
-  constructor(private htmlGenerator: HtmlGenerator) {}
+  constructor(htmlGenerator: HtmlGenerator) {
+    this.htmlGenerator = htmlGenerator;
+  }
 
   /**
    * Create a `Hypertext` object from a value.
