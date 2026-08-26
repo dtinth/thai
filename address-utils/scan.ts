@@ -30,7 +30,7 @@ export function nextLabel(
   minFieldIndex: number,
 ): LabelMatch | undefined {
   for (let position = from; position < text.length; position++) {
-    if (position > 0 && text.charAt(position - 1) !== " ") continue;
+    if (position > 0 && !/\s/.test(text.charAt(position - 1))) continue;
     let best: LabelMatch | undefined;
     for (let index = minFieldIndex; index < FIELD_SPECS.length; index++) {
       for (const label of FIELD_SPECS[index]!.accepted) {

@@ -159,4 +159,7 @@ importAddress(formatAddress(dirty)).address;
 - The package has no function to validate an address. To validate an address,
   you must first parse it. The parsers give you the warnings. A second function
   is not necessary.
+- A foreign address must have a country. A parser reads a foreign address from
+  the right, therefore the last part is always the country. An address with no
+  country keeps all of its text, but the last field goes into the country field.
 - The package does not change Thai text to Latin characters.

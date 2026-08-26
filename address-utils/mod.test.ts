@@ -8,6 +8,7 @@ import {
   parseAddress,
   PROVINCES,
   subdivisionWords,
+  THAI_ADDRESS_FIELDS,
   thaiAddress,
 } from "./mod.ts";
 import { FIELD_SPECS } from "./fields.ts";
@@ -163,6 +164,30 @@ const ROUND_TRIP: readonly [string, Address][] = [
     }),
   ],
   ["a country on its own", foreignAddress({ country: "Singapore" })],
+  [
+    "a postal code in Thai digits",
+    thaiAddress({
+      district: "วัฒนา",
+      province: "กรุงเทพมหานคร",
+      postalCode: "๑๐๑๑๐",
+    }),
+  ],
+  [
+    "a value with 2 spaces in it",
+    thaiAddress({ road: "พระราม  4", province: "เชียงใหม่" }),
+  ],
+  [
+    "a foreign address in Thai characters",
+    foreignAddress({ city: "โตเกียว", country: "ญี่ปุ่น" }),
+  ],
+  [
+    "a foreign road that starts with a digit",
+    foreignAddress({ road: "3rd Avenue", city: "New York", country: "USA" }),
+  ],
+  [
+    "a foreign address with no city",
+    foreignAddress({ addressNo: "58-60", country: "United Kingdom" }),
+  ],
 ];
 
 for (const [name, address] of ROUND_TRIP) {
@@ -232,6 +257,49 @@ test("keeps the จังหวัด label for the seventy-six that are provinc
     formatAddress(thaiAddress({ province: "มณฑลพิเศษ" })),
     "จังหวัดมณฑลพิเศษ",
   );
+});
+
+test("keeps the 12 fields for every combination of them", () => {
+  // The values contain the difficult data: a label word in a value, 2 spaces,
+  // Thai digits, and a Latin value.
+  const samples: Record<string, string> = {
+    addressNo: "99/1",
+    moo: "2",
+    village: "สวนทอง",
+    soi: "พระรามที่ 3 ซอย 29",
+    road: "พระราม  4",
+    building: "อาคารเอบีซี",
+    floor: "5",
+    room: "L5",
+    subdistrict: "คลองตัน",
+    district: "วัฒนา",
+    province: "กรุงเทพมหานคร",
+    postalCode: "๑๐๑๑๐",
+  };
+  let count = 0;
+  for (let mask = 0; mask < (1 << THAI_ADDRESS_FIELDS.length); mask++) {
+    const init: Record<string, string> = {};
+    THAI_ADDRESS_FIELDS.forEach((field, index) => {
+      if (mask & (1 << index)) init[field] = samples[field]!;
+    });
+    const address = thaiAddress(init);
+    const text = formatAddress(address);
+    const result = parseAddress(text);
+    assert.deepEqual(result.address, address, text);
+    assert.deepEqual(result.warnings, [], text);
+    count++;
+  }
+  assert.equal(count, 4096);
+});
+
+test("a foreign address must have a country", () => {
+  // The parser reads a foreign address from the right. Therefore the last part
+  // is always the country. An address with no country keeps all of its text,
+  // but the last field goes into the country field.
+  const { address } = parseAddress(
+    formatAddress(foreignAddress({ city: "London" })),
+  );
+  assert.deepEqual(address, foreignAddress({ country: "London" }));
 });
 
 test("reads an empty string as an empty Thai address", () => {

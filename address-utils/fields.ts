@@ -48,8 +48,8 @@ export const FIELD_SPECS: readonly FieldSpec[] = [
   { key: "province", label: () => "จังหวัด", accepted: ["จังหวัด", "จ."] },
 ];
 
-/** A postal code of 5 digits at the end of a value. */
-export const TRAILING_POSTAL_CODE = /^(.*?)[\s,]*([0-9]{5})$/;
+/** A postal code of 5 digits at the end of a value. Thai digits are permitted. */
+export const TRAILING_POSTAL_CODE = /^(.*?)[\s,]*([0-9๐-๙]{5})$/;
 
 /** Any Thai character. */
 export const THAI_SCRIPT = /[฀-๿]/;
