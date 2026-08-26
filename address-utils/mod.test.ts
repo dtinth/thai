@@ -60,7 +60,7 @@ test("formats a Bangkok address with แขวง/เขต", () => {
   assert.equal(
     formatAddress(FULL_BANGKOK),
     "เลขที่ 99/1 หมู่ที่ 2 หมู่บ้านสวนทอง ซอยสุขใจ ถนนสุขุมวิท อาคารเอบีซี ชั้น 5 " +
-      "ห้องเลขที่ 501 แขวงคลองตัน เขตวัฒนา จังหวัดกรุงเทพมหานคร 10110",
+      "ห้องเลขที่ 501 แขวงคลองตัน เขตวัฒนา กรุงเทพมหานคร 10110",
   );
 });
 
@@ -77,13 +77,13 @@ test("formats a provincial address with ตำบล/อำเภอ", () => {
   );
 });
 
-test("recognises abbreviated Bangkok, and leaves the value as written", () => {
+test("writes กรุงเทพมหานคร with no จังหวัด label, in any spelling", () => {
   const address = thaiAddress({
     subdistrict: "แสมดำ",
     district: "บางขุนเทียน",
     province: "กทม.",
   });
-  assert.equal(formatAddress(address), "แขวงแสมดำ เขตบางขุนเทียน จังหวัดกทม.");
+  assert.equal(formatAddress(address), "แขวงแสมดำ เขตบางขุนเทียน กทม.");
 });
 
 const ROUND_TRIP: readonly [string, Address][] = [
@@ -112,6 +112,23 @@ const ROUND_TRIP: readonly [string, Address][] = [
     }),
   ],
   ["a village on its own", thaiAddress({ village: "สวนทอง" })],
+  ["กรุงเทพมหานคร on its own", thaiAddress({ province: "กรุงเทพมหานคร" })],
+  [
+    "an abbreviated Bangkok",
+    thaiAddress({
+      district: "บางขุนเทียน",
+      province: "กทม.",
+      postalCode: "10150",
+    }),
+  ],
+  [
+    "a province the table has never heard of",
+    thaiAddress({
+      district: "เมืองใหม่",
+      province: "มณฑลพิเศษ",
+      postalCode: "10150",
+    }),
+  ],
   ["a moo on its own", thaiAddress({ moo: "2" })],
   [
     "a soi that contains the word ซอย",
@@ -174,7 +191,7 @@ test("reads a legacy Bangkok address written with ตำบล/อำเภอ, 
   assert.deepEqual(warnings, []);
   assert.equal(
     formatAddress(address),
-    "เลขที่ 1 แขวงแสมดำ เขตบางขุนเทียน จังหวัดกรุงเทพมหานคร 10150",
+    "เลขที่ 1 แขวงแสมดำ เขตบางขุนเทียน กรุงเทพมหานคร 10150",
   );
 });
 
@@ -203,6 +220,18 @@ test("never returns an empty address for non-empty input", () => {
     assert.notEqual(values(address).trim(), "", `emptied "${text}"`);
     assertNothingLost(text, address);
   }
+});
+
+test("keeps the จังหวัด label for the seventy-six that are provinces", () => {
+  assert.equal(
+    formatAddress(thaiAddress({ province: "เชียงใหม่" })),
+    "จังหวัดเชียงใหม่",
+  );
+  // A division the table does not know keeps the label too, so it stays readable.
+  assert.equal(
+    formatAddress(thaiAddress({ province: "มณฑลพิเศษ" })),
+    "จังหวัดมณฑลพิเศษ",
+  );
 });
 
 test("reads an empty string as an empty Thai address", () => {
@@ -243,8 +272,8 @@ test("imports a pasted Bangkok address with no จังหวัด label", () 
       postalCode: "10110",
     }),
   );
+  // Only the house number: กรุงเทพมหานคร is an exact table match, not a guess.
   assert.deepEqual(warnings.map((warning) => warning.code), [
-    "unlabelled-text",
     "unlabelled-text",
   ]);
   assertNothingLost(text, address);
@@ -287,7 +316,7 @@ test("splits a province glued to the district", () => {
   assert.equal(address.kind === "thai" && address.province, "กรุงเทพฯ");
 });
 
-test("normalises Thai digits and ungluess a postal code", () => {
+test("normalises Thai digits and unglues a postal code", () => {
   const { address } = importAddress(
     "1 แขวงแสมดำ เขตบางขุนเทียน กรุงเทพมหานคร๑๐๑๕๐",
   );
@@ -301,7 +330,7 @@ test("flags ตำบล/อำเภอ on a Bangkok address, and formatting co
   assert.ok(warnings.some((warning) => warning.code === "subdivision-wording"));
   assert.equal(
     formatAddress(address),
-    "เลขที่ 1 แขวงแสมดำ เขตบางขุนเทียน จังหวัดกรุงเทพมหานคร 10150",
+    "เลขที่ 1 แขวงแสมดำ เขตบางขุนเทียน กรุงเทพมหานคร 10150",
   );
 });
 

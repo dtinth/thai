@@ -5,7 +5,7 @@
  */
 
 import { THAI_SCRIPT } from "./fields.ts";
-import { collectThai, hasLabel } from "./scan.ts";
+import { collectThai, hasLabel, recoverBareDivision } from "./scan.ts";
 import { foreignAddress, type ParsedAddress, thaiAddress } from "./types.ts";
 
 /**
@@ -18,11 +18,12 @@ import { foreignAddress, type ParsedAddress, thaiAddress } from "./types.ts";
  * in plain sight, rather than a value that disappeared. No warnings at all
  * means the text was already in this package's own format.
  *
- * No tables and no guessing; for text from somewhere else use
- * {@linkcode importAddress}.
+ * No guessing: the only lookup it does is recognising a division name written
+ * with no `จังหวัด` label, which is how กรุงเทพมหานคร is written. For text from
+ * somewhere else use {@linkcode importAddress}.
  *
  * ```ts
- * parseAddress("เลขที่ 99/1 แขวงคลองตัน เขตวัฒนา จังหวัดกรุงเทพมหานคร 10110").address;
+ * parseAddress("เลขที่ 99/1 แขวงคลองตัน เขตวัฒนา กรุงเทพมหานคร 10110").address;
  * // { kind: "thai", addressNo: "99/1", subdistrict: "คลองตัน", … }
  * ```
  */
@@ -33,6 +34,9 @@ export function parseAddress(text: string): ParsedAddress {
     return parseForeign(normalized);
   }
   const { values, warnings } = collectThai(normalized);
+  // กรุงเทพมหานคร is written with no label in front of it, so the only way back
+  // is to recognise the name itself.
+  recoverBareDivision(values, warnings);
   return { address: thaiAddress(values), warnings };
 }
 

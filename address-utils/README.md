@@ -16,7 +16,7 @@ const address = thaiAddress({
 });
 
 formatAddress(address);
-// "เลขที่ 99/1 ถนนสุขุมวิท แขวงคลองตัน เขตวัฒนา จังหวัดกรุงเทพมหานคร 10110"
+// "เลขที่ 99/1 ถนนสุขุมวิท แขวงคลองตัน เขตวัฒนา กรุงเทพมหานคร 10110"
 
 parseAddress(formatAddress(address)).address; // the same twelve fields, unchanged
 ```
@@ -45,8 +45,10 @@ are told apart by `kind`, never by the country field.
 
 ## Two parsers, on purpose
 
-`parseAddress` reads this package's own format and nothing else: no tables, no
-guessing, an exact inverse of `formatAddress`.
+`parseAddress` reads this package's own format and nothing else — an exact
+inverse of `formatAddress`, with no guessing. Its only lookup is recognising a
+division name written without a `จังหวัด` label, which is how กรุงเทพมหานคร is
+written.
 
 `importAddress` reads text from a person or another system: line breaks and
 commas as separators, Thai digits, a postal code glued to the word before it,
@@ -70,7 +72,7 @@ it — never a value that quietly disappeared.
 importAddress("99/1 ถ.สุขุมวิท แขวงคลองตัน เขตวัฒนา กรุงเทพมหานคร 10110");
 // address: { addressNo: "99/1", road: "สุขุมวิท", subdistrict: "คลองตัน",
 //            district: "วัฒนา", province: "กรุงเทพมหานคร", postalCode: "10110", … }
-// warnings: two "unlabelled-text" — the house number and the province carried no label
+// warnings: one "unlabelled-text" — the house number carried no label of its own
 ```
 
 ## Bangkok
@@ -80,13 +82,20 @@ but a metropolitan administration of the same rank — which is why the DBD's AP
 calls this field "CountrySubDivision". The address field keeps the name
 `province`, because that is what the ภ.ง.ด. column is called.
 
-Bangkok is the only one of the seventy-seven whose subdivisions are named แขวง
-and เขต; the provinces use ตำบล and อำเภอ. That lives as one row in the table
-rather than as a rule spread through the code — and it is deliberately not
-derived from "special administrative area", because เมืองพัทยา is one of those too
-and still writes ตำบล/อำเภอ.
+Two things follow, and both show up in what gets printed. Bangkok is the only
+one of the seventy-seven whose subdivisions are named แขวง and เขต — the
+provinces use ตำบล and อำเภอ — and its name is written **bare**, because `จังหวัด`
+belongs to the seventy-six that are provinces. Both live as one row in the table
+rather than as rules spread through the code, and neither is derived from
+"special administrative area": เมืองพัทยา is one of those too and still writes
+ตำบล/อำเภอ.
 
 ```ts
+formatAddress(thaiAddress({ district: "วัฒนา", province: "กรุงเทพมหานคร" }));
+// "เขตวัฒนา กรุงเทพมหานคร"          — no จังหวัด, because it is not one
+formatAddress(thaiAddress({ district: "เมืองเชียงใหม่", province: "เชียงใหม่" }));
+// "อำเภอเมืองเชียงใหม่ จังหวัดเชียงใหม่"
+
 subdivisionWords("กทม."); // { subdistrict: "แขวง", district: "เขต" }
 subdivisionWords("เชียงใหม่"); // { subdistrict: "ตำบล", district: "อำเภอ" }
 findProvince("จ.ภูเก็ต")?.code; // "TH-83"
@@ -105,7 +114,7 @@ round trip corrects it:
 ```ts
 const wrong = "เลขที่ 1 ตำบลแสมดำ อำเภอบางขุนเทียน จังหวัดกรุงเทพมหานคร 10150";
 formatAddress(parseAddress(wrong).address);
-// "เลขที่ 1 แขวงแสมดำ เขตบางขุนเทียน จังหวัดกรุงเทพมหานคร 10150"
+// "เลขที่ 1 แขวงแสมดำ เขตบางขุนเทียน กรุงเทพมหานคร 10150"
 ```
 
 ## Field values that contain other fields' labels

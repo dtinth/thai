@@ -15,7 +15,7 @@
  * });
  *
  * const line = formatAddress(address);
- * // "เลขที่ 99/1 แขวงคลองตัน เขตวัฒนา จังหวัดกรุงเทพมหานคร 10110"
+ * // "เลขที่ 99/1 แขวงคลองตัน เขตวัฒนา กรุงเทพมหานคร 10110"
  *
  * parseAddress(line).address; // the same twelve fields, unchanged
  * ```

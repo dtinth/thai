@@ -32,6 +32,11 @@ export interface Province {
   readonly nameEn: string;
   /** Other spellings seen in the wild, e.g. `"กทม."` for Bangkok. */
   readonly variants: readonly string[];
+  /**
+   * The word written before this name in an address: `"จังหวัด"` for a
+   * province, and nothing at all for กรุงเทพมหานคร, which is not one.
+   */
+  readonly label: string;
   /** The words this province uses for its subdivisions. */
   readonly subdivisionWords: SubdivisionWords;
 }
@@ -140,6 +145,7 @@ export const PROVINCES: readonly Province[] = ROWS.map(
     nameTh,
     nameEn,
     variants,
+    label: nameTh === BANGKOK ? "" : "จังหวัด",
     subdivisionWords: nameTh === BANGKOK ? METROPOLITAN : PROVINCIAL,
   }),
 );
@@ -183,4 +189,29 @@ export function findProvince(input: string): Province | undefined {
  */
 export function subdivisionWords(province: string): SubdivisionWords {
   return findProvince(province)?.subdivisionWords ?? PROVINCIAL;
+}
+
+/**
+ * Split a division name off the end of a value, when the last whitespace-
+ * separated token or two names one.
+ *
+ * This is what lets กรุงเทพมหานคร be read back after being written with no
+ * `จังหวัด` label in front of it. An exact match against the seventy-seven
+ * names — never a guess.
+ */
+export function splitTrailingDivision(
+  value: string,
+): { division: string; rest: string } | undefined {
+  const tokens = value.split(" ");
+  for (
+    let index = Math.max(0, tokens.length - 3);
+    index < tokens.length;
+    index++
+  ) {
+    const candidate = tokens.slice(index).join(" ");
+    if (findProvince(candidate)) {
+      return { division: candidate, rest: tokens.slice(0, index).join(" ") };
+    }
+  }
+  return undefined;
 }

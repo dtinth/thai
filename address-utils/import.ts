@@ -7,7 +7,7 @@
 import { FIELD_SPECS, THAI_SCRIPT } from "./fields.ts";
 import { parseForeign } from "./parse.ts";
 import { findProvince, PROVINCES, subdivisionWords } from "./provinces.ts";
-import { collectThai } from "./scan.ts";
+import { collectThai, recoverBareDivision } from "./scan.ts";
 import {
   type ParsedAddress,
   thaiAddress,
@@ -27,37 +27,11 @@ function normalizeThai(text: string): string {
     .trim();
 }
 
-/** Split a province off the end of a value, when one is written there. */
-function splitProvince(
-  value: string,
-): { province: string; rest: string } | undefined {
-  const tokens = value.split(" ");
-  for (
-    let index = Math.max(0, tokens.length - 3);
-    index < tokens.length;
-    index++
-  ) {
-    const candidate = tokens.slice(index).join(" ");
-    if (findProvince(candidate)) {
-      return { province: candidate, rest: tokens.slice(0, index).join(" ") };
-    }
-  }
-  // Glued to the word before it, as in "…เขตบางขุนเทียนกรุงเทพฯ".
-  for (const province of PROVINCES) {
-    for (const name of [province.nameTh, ...province.variants]) {
-      if (value.length <= name.length || !value.endsWith(name)) continue;
-      const rest = value.slice(0, -name.length).trim();
-      // …but อำเภอเมืองเชียงใหม่ is a district whose name ends in its province,
-      // not a district with the province stuck to it.
-      if (rest.endsWith("เมือง")) continue;
-      return { province: name, rest };
-    }
-  }
-  return undefined;
-}
-
-/** Recover a province that was written with no label of its own. */
-function recoverProvince(
+/**
+ * A division glued to the word before it, as in "…เขตบางขุนเทียนกรุงเทพฯ".
+ * Unlike the spaced case this really is a guess, so it is reported.
+ */
+function recoverGluedDivision(
   values: Partial<Record<ThaiAddressField, string>>,
   warnings: Warning[],
 ): void {
@@ -66,19 +40,24 @@ function recoverProvince(
     const key = FIELD_SPECS[index]!.key;
     const value = values[key];
     if (!value) continue;
-    // Only the last field with content: a province name is written at the end,
-    // and anything earlier is far more likely to be part of a road or a name.
-    const found = splitProvince(value);
-    if (found) {
-      values[key] = found.rest;
-      values.province = found.province;
-      warnings.push({
-        code: "unlabelled-text",
-        message:
-          `"${found.province}" carried no label of its own and was read as the province.`,
-        field: "province",
-        text: found.province,
-      });
+    for (const division of PROVINCES) {
+      for (const name of [division.nameTh, ...division.variants]) {
+        if (value.length <= name.length || !value.endsWith(name)) continue;
+        const rest = value.slice(0, -name.length).trim();
+        // …but อำเภอเมืองเชียงใหม่ is a district whose name ends in its province,
+        // not a district with the province stuck to it.
+        if (!rest || rest.endsWith("เมือง")) continue;
+        values[key] = rest;
+        values.province = name;
+        warnings.push({
+          code: "unlabelled-text",
+          message:
+            `"${name}" was stuck to the ${key} and was read as the province.`,
+          field: "province",
+          text: name,
+        });
+        return;
+      }
     }
     return;
   }
@@ -147,7 +126,8 @@ export function importAddress(text: string): ParsedAddress {
 
   const normalized = normalizeThai(tidied);
   const { values, warnings } = collectThai(normalized);
-  recoverProvince(values, warnings);
+  recoverBareDivision(values, warnings);
+  recoverGluedDivision(values, warnings);
   checkProvince(values, normalized, warnings);
   return { address: thaiAddress(values), warnings };
 }
