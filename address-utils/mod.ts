@@ -39,7 +39,6 @@ export {
 export {
   BANGKOK,
   findProvince,
-  isBangkok,
   type Province,
   PROVINCES,
   type SubdivisionWords,

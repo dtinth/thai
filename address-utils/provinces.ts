@@ -167,20 +167,16 @@ export function findProvince(input: string): Province | undefined {
 }
 
 /**
- * Whether `input` names Bangkok, in any of its spellings.
+ * The subdivision words to print for a province — แขวง/เขต for Bangkok,
+ * ตำบล/อำเภอ for everything else.
+ *
+ * The one thing {@linkcode findProvince} cannot give you: a province the table
+ * does not know still needs an answer, and it is ตำบล/อำเภอ.
  *
  * ```ts
- * isBangkok("กรุงเทพฯ");   // true
- * isBangkok("เชียงใหม่");  // false
+ * subdivisionWords("กทม.");      // { subdistrict: "แขวง", district: "เขต" }
+ * subdivisionWords("เชียงใหม่"); // { subdistrict: "ตำบล", district: "อำเภอ" }
  * ```
- */
-export function isBangkok(input: string): boolean {
-  return findProvince(input)?.nameTh === BANGKOK;
-}
-
-/**
- * The subdivision words to print for a province — แขวง/เขต for Bangkok,
- * ตำบล/อำเภอ for everything else, including provinces the table doesn't know.
  */
 export function subdivisionWords(province: string): SubdivisionWords {
   return findProvince(province)?.subdivisionWords ?? PROVINCIAL;
