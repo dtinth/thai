@@ -4,6 +4,11 @@
   "include-component-in-tag": true,
   "bootstrap-sha": "7b92631e5a8a7b1008034c761c7e2888a12db240",
   "packages": {
+    "address-utils": {
+      "extra-files": [
+        { "type": "json", "path": "deno.json", "jsonpath": "$.version" }
+      ]
+    },
     "carify": {
       "extra-files": [
         { "type": "json", "path": "deno.json", "jsonpath": "$.version" }
