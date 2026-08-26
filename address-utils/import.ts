@@ -6,7 +6,7 @@
 
 import { FIELD_SPECS, THAI_SCRIPT } from "./fields.ts";
 import { parseForeign } from "./parse.ts";
-import { findProvince, isBangkok, PROVINCES } from "./provinces.ts";
+import { findProvince, PROVINCES, subdivisionWords } from "./provinces.ts";
 import { collectThai } from "./scan.ts";
 import {
   type ParsedAddress,
@@ -100,11 +100,16 @@ function checkProvince(
     });
     return;
   }
-  if (isBangkok(province) && /(?:^| )(?:ตำบล|อำเภอ|ต\.|อ\.)/.test(text)) {
+  // Not "is this Bangkok" but "does this province write its subdivisions the
+  // other way" — which is the thing the warning is actually about.
+  const words = subdivisionWords(province);
+  if (
+    words.subdistrict !== "ตำบล" && /(?:^| )(?:ตำบล|อำเภอ|ต\.|อ\.)/.test(text)
+  ) {
     warnings.push({
       code: "subdivision-wording",
       message:
-        "A Bangkok address written with ตำบล/อำเภอ; formatting writes แขวง/เขต.",
+        `${province} writes ${words.subdistrict}/${words.district}, but this address says ตำบล/อำเภอ; formatting corrects it.`,
       field: "province",
       text: province,
     });

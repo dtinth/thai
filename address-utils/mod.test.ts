@@ -5,7 +5,6 @@ import {
   foreignAddress,
   formatAddress,
   importAddress,
-  isBangkok,
   parseAddress,
   PROVINCES,
   subdivisionWords,
@@ -217,14 +216,15 @@ test("knows the seventy-seven provinces", () => {
   for (
     const spelling of ["กทม.", "กรุงเทพฯ", "กรุงเทพ", "จ.กรุงเทพมหานคร", "Bangkok"]
   ) {
-    assert.ok(isBangkok(spelling), spelling);
+    const words = { subdistrict: "แขวง", district: "เขต" };
+    assert.deepEqual(subdivisionWords(spelling), words, spelling);
   }
-  assert.ok(!isBangkok("เชียงใหม่"));
-  assert.ok(!isBangkok("พัทยา"));
-  assert.deepEqual(subdivisionWords("ไม่มีจังหวัดนี้"), {
-    subdistrict: "ตำบล",
-    district: "อำเภอ",
-  });
+  // เมืองพัทยา is a special administrative area too and still writes ตำบล/อำเภอ,
+  // as does any province the table has never heard of.
+  for (const spelling of ["เชียงใหม่", "พัทยา", "ไม่มีจังหวัดนี้"]) {
+    const words = { subdistrict: "ตำบล", district: "อำเภอ" };
+    assert.deepEqual(subdivisionWords(spelling), words, spelling);
+  }
 });
 
 // ── importAddress ────────────────────────────────────────────────────────────

@@ -82,10 +82,15 @@ derived from "special administrative area", because เมืองพัทย�
 and still writes ตำบล/อำเภอ.
 
 ```ts
-isBangkok("กทม."); // true — as are กรุงเทพฯ, กรุงเทพ, กทม, Bangkok
+subdivisionWords("กทม."); // { subdistrict: "แขวง", district: "เขต" }
 subdivisionWords("เชียงใหม่"); // { subdistrict: "ตำบล", district: "อำเภอ" }
 findProvince("จ.ภูเก็ต")?.code; // "TH-83"
 ```
+
+Everything else about a province comes off the row itself — `findProvince`
+matches Thai, romanized and abbreviated spellings, with or without a `จังหวัด` /
+`จ.` prefix. `subdivisionWords` exists alongside it for the one case a row
+cannot answer: a province the table does not know still writes ตำบล/อำเภอ.
 
 Parsing accepts both wordings for either province, so an address written
 `ตำบล`/`อำเภอ` in Bangkok — by hand, or by an older version of some other
@@ -136,7 +141,6 @@ THAI_ADDRESS_FIELDS: readonly ThaiAddressField[];
 
 PROVINCES: readonly Province[];
 findProvince(input: string): Province | undefined;
-isBangkok(input: string): boolean;
 subdivisionWords(province: string): SubdivisionWords;
 BANGKOK: string;
 ```
