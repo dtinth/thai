@@ -31,7 +31,7 @@ export interface ThaiAddress {
   readonly subdistrict: string;
   /** อำเภอ in most provinces, เขต in Bangkok (`AMPHUR`). */
   readonly district: string;
-  /** จังหวัด (`PROVINCE`). */
+  /** จังหวัด, or กรุงเทพมหานคร, which is not one (`PROVINCE`). */
   readonly province: string;
   /** รหัสไปรษณีย์ — five digits (`POSTAL_CODE`). */
   readonly postalCode: string;

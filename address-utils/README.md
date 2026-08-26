@@ -75,9 +75,14 @@ importAddress("99/1 ถ.สุขุมวิท แขวงคลองตั�
 
 ## Bangkok
 
-Bangkok is the only province whose subdivisions are named แขวง and เขต;
-everywhere else they are ตำบล and อำเภอ. That lives as one row in the province
-table rather than as a rule spread through the code — and it is deliberately not
+Thailand has seventy-six จังหวัด plus กรุงเทพมหานคร, which is not a จังหวัด at all
+but a metropolitan administration of the same rank — which is why the DBD's API
+calls this field "CountrySubDivision". The address field keeps the name
+`province`, because that is what the ภ.ง.ด. column is called.
+
+Bangkok is the only one of the seventy-seven whose subdivisions are named แขวง
+and เขต; the provinces use ตำบล and อำเภอ. That lives as one row in the table
+rather than as a rule spread through the code — and it is deliberately not
 derived from "special administrative area", because เมืองพัทยา is one of those too
 and still writes ตำบล/อำเภอ.
 
@@ -87,7 +92,7 @@ subdivisionWords("เชียงใหม่"); // { subdistrict: "ตำบล
 findProvince("จ.ภูเก็ต")?.code; // "TH-83"
 ```
 
-Everything else about a province comes off the row itself — `findProvince`
+Everything else about a division comes off the row itself — `findProvince`
 matches Thai, romanized and abbreviated spellings, with or without a `จังหวัด` /
 `จ.` prefix. `subdivisionWords` exists alongside it for the one case a row
 cannot answer: a province the table does not know still writes ตำบล/อำเภอ.
@@ -120,7 +125,7 @@ importAddress(formatAddress(dirty)).address;
 
 ## What this package does not do
 
-- **No tambon/amphoe database.** Only the seventy-seven provinces are built in
+- **No tambon/amphoe database.** Only the seventy-seven divisions are built in
   (a few kilobytes). Reconciling a subdistrict against a postal code needs the
   ~7,400-row table, which belongs somewhere else.
 - **No validation function.** Validating an address means parsing it, so the
