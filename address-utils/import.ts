@@ -1,5 +1,5 @@
 /**
- * Reading an address written by a human or another system.
+ * How to read an address that a person or a different system wrote.
  *
  * @module
  */
@@ -17,7 +17,7 @@ import {
 
 const THAI_DIGITS = "๐๑๒๓๔๕๖๗๘๙";
 
-/** Line breaks, commas and Thai digits are noise; a glued postal code is not. */
+/** Remove line breaks and commas, change Thai digits, divide a postal code. */
 function normalizeThai(text: string): string {
   return text
     .replace(/[\n\r\t,;]+/g, " ")
@@ -28,8 +28,9 @@ function normalizeThai(text: string): string {
 }
 
 /**
- * A division glued to the word before it, as in "…เขตบางขุนเทียนกรุงเทพฯ".
- * Unlike the spaced case this really is a guess, so it is reported.
+ * A division name can touch the word in front of it, as in
+ * "…เขตบางขุนเทียนกรุงเทพฯ". The package is not sure about this text, therefore the
+ * function adds a warning. A name with a space in front of it is different.
  */
 function recoverGluedDivision(
   values: Partial<Record<ThaiAddressField, string>>,
@@ -44,8 +45,8 @@ function recoverGluedDivision(
       for (const name of [division.nameTh, ...division.variants]) {
         if (value.length <= name.length || !value.endsWith(name)) continue;
         const rest = value.slice(0, -name.length).trim();
-        // …but อำเภอเมืองเชียงใหม่ is a district whose name ends in its province,
-        // not a district with the province stuck to it.
+        // But อำเภอเมืองเชียงใหม่ is a district. Its name ends with the name
+        // of its province. The province does not touch it.
         if (!rest || rest.endsWith("เมือง")) continue;
         values[key] = rest;
         values.province = name;
@@ -79,8 +80,8 @@ function checkProvince(
     });
     return;
   }
-  // Not "is this Bangkok" but "does this province write its subdivisions the
-  // other way" — which is the thing the warning is actually about.
+  // The question is not "is this Bangkok". The question is if the division
+  // writes its subdivisions with the other words. That is the subject.
   const words = subdivisionWords(province);
   if (
     words.subdistrict !== "ตำบล" && /(?:^| )(?:ตำบล|อำเภอ|ต\.|อ\.)/.test(text)
@@ -96,17 +97,18 @@ function checkProvince(
 }
 
 /**
- * Read an address from text this package did not write — pasted by a person,
- * or handed over by another system.
+ * Read an address from text that this package did not write. A person or a
+ * different system wrote that text.
  *
- * Same guarantee as {@linkcode parseAddress} — an address always comes back and
- * nothing is dropped — with more work in between: line breaks and commas are
- * treated as separators, Thai digits become ASCII, a postal code glued to the
- * word before it is split off, and a province written with no `จังหวัด` label
- * is recognised from the province table and moved out of the field it landed in.
+ * The rules of {@linkcode parseAddress} apply: the function always gives you an
+ * address, and it does not delete text. But this function does more. It accepts
+ * line breaks and commas between the fields. It changes Thai digits to Latin
+ * digits. It divides a postal code from the word in front of it. It also finds
+ * a division name that has no `จังหวัด` label, and it moves that name out of
+ * the field that contains it.
  *
- * The result is meant to be shown to a person to check, so anything placed by
- * guesswork rather than by an explicit label comes back as a warning.
+ * A person must examine the result. Therefore the function adds a warning for each
+ * value that has no label.
  *
  * ```ts
  * importAddress("99/1 ถ.สุขุมวิท แขวงคลองตัน เขตวัฒนา กรุงเทพมหานคร 10110").address;
@@ -116,8 +118,8 @@ function checkProvince(
 export function importAddress(text: string): ParsedAddress {
   const tidied = text.replace(/\s+/g, " ").trim();
   if (!tidied) return { address: thaiAddress(), warnings: [] };
-  // A foreign address is comma-separated, so its commas have to survive — and a
-  // line break stands in for the comma somebody left out.
+  // A foreign address has commas between its fields, therefore the commas must
+  // stay. A line break replaces a comma that the person did not write.
   if (!THAI_SCRIPT.test(tidied)) {
     return parseForeign(
       text.replace(/[\n\r]+/g, ",").replace(/\s+/g, " ").trim(),

@@ -1,5 +1,5 @@
 /**
- * Turning an address into the one string form this package reads back.
+ * How to write an address as text. This package reads back this same format.
  *
  * @module
  */
@@ -9,13 +9,15 @@ import { findProvince } from "./provinces.ts";
 import { type Address, isThaiAddress } from "./types.ts";
 
 /**
- * Write an address as a single line.
+ * Write an address as one line of text.
  *
- * Field *values* are never edited — only labels and separators are added — so
- * {@linkcode parseAddress} reads back exactly what went in. The labels come from
- * the division table: a Bangkok address prints แขวง/เขต even when it was stored
- * as ตำบล/อำเภอ, and prints กรุงเทพมหานคร with no `จังหวัด` in front of it,
- * because it is not one.
+ * This function does not change the value of a field. It only adds the labels
+ * and the spaces. Therefore {@linkcode parseAddress} gives you the same values
+ * again.
+ *
+ * The labels come from the table of divisions. A Bangkok address gets แขวง and
+ * เขต, also when the data contains ตำบล and อำเภอ. The name กรุงเทพมหานคร gets
+ * no `จังหวัด` label, because กรุงเทพมหานคร is not a province.
  *
  * ```ts
  * formatAddress(thaiAddress({ addressNo: "99/1", subdistrict: "คลองตัน",
@@ -29,7 +31,7 @@ export function formatAddress(address: Address): string {
 
 function formatThai(address: Address & { kind: "thai" }): string {
   const division = findProvince(address.province);
-  // A province the table doesn't know is still written with its จังหวัด label.
+  // A division that the table does not know keeps its จังหวัด label.
   const words = division?.subdivisionWords ??
     { subdistrict: "ตำบล", district: "อำเภอ" };
   const provinceLabel = division?.label ?? "จังหวัด";
@@ -38,8 +40,8 @@ function formatThai(address: Address & { kind: "thai" }): string {
     const value = address[spec.key].trim();
     if (!value) continue;
     const label = spec.key === "province" ? provinceLabel : spec.label(words);
-    // A Thai value follows its label with no space; anything else gets one —
-    // and a label that is empty (กรุงเทพมหานคร) gets neither.
+    // A Thai value comes directly after its label. A different value gets a
+    // space. An empty label (กรุงเทพมหานคร) gets no space.
     const separator = !label || THAI_SCRIPT.test(value.charAt(0)) ? "" : " ";
     parts.push(`${label}${separator}${value}`);
   }

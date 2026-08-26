@@ -1,5 +1,5 @@
 /**
- * Reading back what {@linkcode formatAddress} wrote.
+ * How to read the text that {@linkcode formatAddress} writes.
  *
  * @module
  */
@@ -9,18 +9,21 @@ import { collectThai, hasLabel, recoverBareDivision } from "./scan.ts";
 import { foreignAddress, type ParsedAddress, thaiAddress } from "./types.ts";
 
 /**
- * Read an address written by {@linkcode formatAddress}.
+ * Read an address that {@linkcode formatAddress} wrote.
  *
- * Total by construction: an address always comes back, and every character of
- * the input that isn't a label this package recognised ends up in some field.
- * Text that carried no label is placed by position and reported as an
- * `unlabelled-text` warning — so the worst case is a value in the wrong field,
- * in plain sight, rather than a value that disappeared. No warnings at all
- * means the text was already in this package's own format.
+ * This function always gives you an address. Each character that is not a
+ * label of this package goes into a field. Text that has no label goes into a
+ * field by its position, and the function adds an `unlabelled-text` warning.
+ * In the worst condition, a value goes into the incorrect field, where a
+ * person can see it. The function does not delete text.
  *
- * No guessing: the only lookup it does is recognising a division name written
- * with no `จังหวัด` label, which is how กรุงเทพมหานคร is written. For text from
- * somewhere else use {@linkcode importAddress}.
+ * If there are no warnings, the text was already in the format of this
+ * package.
+ *
+ * The function does not try to correct unusual text. It makes only one
+ * comparison with the table of divisions: it finds a division name that has no
+ * `จังหวัด` label, because กรุงเทพมหานคร has no label. For text from a
+ * different system, use {@linkcode importAddress}.
  *
  * ```ts
  * parseAddress("เลขที่ 99/1 แขวงคลองตัน เขตวัฒนา กรุงเทพมหานคร 10110").address;
@@ -34,16 +37,17 @@ export function parseAddress(text: string): ParsedAddress {
     return parseForeign(normalized);
   }
   const { values, warnings } = collectThai(normalized);
-  // กรุงเทพมหานคร is written with no label in front of it, so the only way back
-  // is to recognise the name itself.
+  // กรุงเทพมหานคร has no label in front of it. Therefore the parser must find the
+  // name itself.
   recoverBareDivision(values, warnings);
   return { address: thaiAddress(values), warnings };
 }
 
 /**
- * Foreign addresses are `"<no> <road>, <city>, <country>"`, so they are read
- * from the right: the country last, the city before it, and whatever remains is
- * the street — split at the first token only when that token starts with a digit.
+ * A foreign address has the format `"<no> <road>, <city>, <country>"`. Therefore the
+ * parser reads it from the right: first the country, then the city. The
+ * remainder is the street. The parser divides the street at the first space
+ * only when the first word starts with a digit.
  */
 export function parseForeign(text: string): ParsedAddress {
   const parts = text.split(",").map((part) => part.trim()).filter(Boolean);

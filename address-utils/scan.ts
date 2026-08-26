@@ -1,5 +1,5 @@
 /**
- * The ordered label scanner both parsers are built on.
+ * The scanner that finds the labels in their sequence. Both parsers use it.
  *
  * @module
  */
@@ -15,14 +15,14 @@ interface LabelMatch {
 }
 
 /**
- * The next label at or after `from` belonging to a field at or after
- * `minFieldIndex`.
+ * Find the next label at or after the position `from`. The label must belong to
+ * a field at or after `minFieldIndex`.
  *
- * Two rules do the work. A label only counts at the start of the string or
- * right after a space, so `"อาคารเอบีซี"` is a building *name*, not a label
- * plus a value. And only fields that come later in the printed order are
- * candidates, so the `ซอย` inside `"ซอยพระรามที่ 3 ซอย 29"` stays part of the
- * soi's value.
+ * There are 2 rules. A label is a label only at the start of the text or
+ * directly after a space. Therefore `"อาคารเอบีซี"` is the name of a building and
+ * not a label with a value. Also, only the fields after the field that the
+ * parser reads are possible. Therefore the `ซอย` in `"ซอยพระรามที่ 3 ซอย 29"` stays
+ * in the value of the soi.
  */
 export function nextLabel(
   text: string,
@@ -34,7 +34,7 @@ export function nextLabel(
     let best: LabelMatch | undefined;
     for (let index = minFieldIndex; index < FIELD_SPECS.length; index++) {
       for (const label of FIELD_SPECS[index]!.accepted) {
-        // Longest wins, so หมู่บ้าน is a village and not หมู่ + "บ้าน…".
+        // The longest label wins. หมู่บ้าน is a village, not หมู่ with a value.
         if (
           text.startsWith(label, position) &&
           (best === undefined || label.length > best.label.length)
@@ -48,18 +48,18 @@ export function nextLabel(
   return undefined;
 }
 
-/** Whether the text carries any label this package recognises. */
+/** Tells you if the text contains a label of this package. */
 export function hasLabel(text: string): boolean {
   return nextLabel(text, 0, 0) !== undefined;
 }
 
 interface Segment {
-  /** The field this text belongs to, or undefined when it carried no label. */
+  /** The field of this text. It is undefined when the text had no label. */
   key?: ThaiAddressField;
   text: string;
 }
 
-/** Cut the text into labelled segments, plus whatever preceded the first label. */
+/** Divide the text into segments with labels, and the text before the first label. */
 function segment(text: string): Segment[] {
   const segments: Segment[] = [];
   let cursor = 0;
@@ -77,25 +77,25 @@ function segment(text: string): Segment[] {
   return segments;
 }
 
-/** Field values read out of a Thai address line, with anything worth flagging. */
+/** The field values from a Thai address line, and the warnings. */
 export interface Collected {
   readonly values: Partial<Record<ThaiAddressField, string>>;
   readonly warnings: Warning[];
 }
 
 /**
- * Read labelled values out of a Thai address line.
+ * Read the values that have labels from a Thai address line.
  *
- * Text that carried no label of its own becomes the house number and is
- * reported, so it is visible in the wrong field rather than gone.
+ * Text that has no label becomes the house number, and the function adds a
+ * warning. The text is then in an incorrect field, but it is not lost.
  */
 export function collectThai(text: string): Collected {
   const segments = segment(text);
   const warnings: Warning[] = [];
 
-  // The postal code trails the last field with no label of its own. Taking it
-  // from whichever field ends the line — not from the province — keeps it out
-  // of that field's value when the province is missing.
+  // The postal code comes after the last field and has no label. The function
+  // takes it from the field at the end of the line, not from the province.
+  // Therefore it does not stay in that field when the address has no province.
   const last = segments[segments.length - 1]!;
   const values: Partial<Record<ThaiAddressField, string>> = {};
   const trailing = TRAILING_POSTAL_CODE.exec(last.text.trim());
@@ -124,12 +124,12 @@ export function collectThai(text: string): Collected {
 }
 
 /**
- * Recover a division written with no `จังหวัด` label — which is how
- * กรุงเทพมหานคร is written — from the end of the last field that has content.
+ * Find a division name that has no `จังหวัด` label. กรุงเทพมหานคร has no label.
+ * The function examines the end of the last field that has data.
  *
- * Exact table match only. When the text it takes had been reported as
- * unlabelled, that report is shortened or dropped, since the text turned out to
- * have a home after all.
+ * The comparison with the table must be exact. If an `unlabelled-text` warning
+ * contains that text, the function makes the warning shorter or removes it,
+ * because the text now has a field.
  */
 export function recoverBareDivision(
   values: Partial<Record<ThaiAddressField, string>>,
@@ -140,8 +140,8 @@ export function recoverBareDivision(
     const key = FIELD_SPECS[index]!.key;
     const value = values[key];
     if (!value) continue;
-    // Only the last field with content: a division name is written at the end,
-    // and anything earlier is far more likely to be part of a road or a name.
+    // Only the last field that has data. A division name comes at the end.
+    // Text before that is usually part of a road name or a different name.
     const split = splitTrailingDivision(value);
     if (!split) return false;
     values[key] = split.rest;
