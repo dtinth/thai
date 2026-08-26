@@ -1,20 +1,19 @@
 /**
- * Thailand's seventy-seven top-level divisions — seventy-six จังหวัด plus
- * กรุงเทพมหานคร, which is not a จังหวัด but a metropolitan administration of
- * the same rank. (That distinction is why the DBD's API calls the field
- * "CountrySubDivision" rather than "province".) The address field keeps the
- * name `province`, because that is what the ภ.ง.ด. column is called.
+ * The 77 top-level divisions of Thailand: 76 จังหวัด and also กรุงเทพมหานคร.
+ * กรุงเทพมหานคร is not a จังหวัด. It is a metropolitan administration of the
+ * same rank. For this reason the DBD API calls the field "CountrySubDivision".
+ * The address field keeps the name `province`, because the ภ.ง.ด. form uses
+ * that name for the column.
  *
- * Bangkok is the only one whose subdivisions are named แขวง and เขต; the
- * seventy-six provinces use ตำบล and อำเภอ. That is a property of one row in
- * this table, not a rule scattered through the code — and it is deliberately
- * not derived from "is a special administrative area", because เมืองพัทยา is
- * one too and still writes ตำบล/อำเภอ.
+ * Bangkok is the only division with the subdivision names แขวง and เขต. The 76
+ * provinces use ตำบล and อำเภอ. This is data in one row of the table, not a
+ * rule in the code. The package does not calculate it from the status "special
+ * administrative area". เมืองพัทยา has that status, but it uses ตำบล and อำเภอ.
  *
  * @module
  */
 
-/** The two subdivision words a province uses. */
+/** The 2 subdivision words of a division. */
 export interface SubdivisionWords {
   /** ตำบล, or แขวง in Bangkok. */
   readonly subdistrict: "ตำบล" | "แขวง";
@@ -24,27 +23,27 @@ export interface SubdivisionWords {
 
 /** One top-level division: a จังหวัด, or กรุงเทพมหานคร. */
 export interface Province {
-  /** ISO 3166-2:TH code, e.g. `"TH-50"`. */
+  /** The ISO 3166-2:TH code, for example `"TH-50"`. */
   readonly code: string;
-  /** Canonical Thai name, e.g. `"เชียงใหม่"`. */
+  /** The standard Thai name, for example `"เชียงใหม่"`. */
   readonly nameTh: string;
-  /** Romanized name, e.g. `"Chiang Mai"`. */
+  /** The name in Latin characters, for example `"Chiang Mai"`. */
   readonly nameEn: string;
-  /** Other spellings seen in the wild, e.g. `"กทม."` for Bangkok. */
+  /** Other spellings that occur in addresses, for example `"กทม."`. */
   readonly variants: readonly string[];
   /**
-   * The word written before this name in an address: `"จังหวัด"` for a
-   * province, and nothing at all for กรุงเทพมหานคร, which is not one.
+   * The word in front of this name in an address. It is `"จังหวัด"` for a
+   * province. It is empty for กรุงเทพมหานคร, which is not a province.
    */
   readonly label: string;
-  /** The words this province uses for its subdivisions. */
+  /** The words that this division uses for its subdivisions. */
   readonly subdivisionWords: SubdivisionWords;
 }
 
 const PROVINCIAL: SubdivisionWords = { subdistrict: "ตำบล", district: "อำเภอ" };
 const METROPOLITAN: SubdivisionWords = { subdistrict: "แขวง", district: "เขต" };
 
-/** Canonical Thai name of Bangkok — a metropolitan administration, not a จังหวัด. */
+/** The standard Thai name of Bangkok, which is not a จังหวัด. */
 export const BANGKOK = "กรุงเทพมหานคร";
 
 // [ISO code, Thai name, romanized name, variants]
@@ -138,7 +137,7 @@ const ROWS: readonly [string, string, string, readonly string[]][] = [
   ["TH-96", "นราธิวาส", "Narathiwat", []],
 ];
 
-/** Every province, in ISO code order. Bangkok is first. */
+/** All 77 divisions, in the sequence of the ISO codes. Bangkok is first. */
 export const PROVINCES: readonly Province[] = ROWS.map(
   ([code, nameTh, nameEn, variants]) => ({
     code,
@@ -157,14 +156,14 @@ for (const province of PROVINCES) {
   }
 }
 
-/** Drop a `จังหวัด` / `จ.` prefix and surrounding whitespace. */
+/** Remove a `จังหวัด` or `จ.` label and the spaces around the name. */
 function bare(input: string): string {
   return input.trim().replace(/^(?:จังหวัด|จ\.)\s*/, "").trim();
 }
 
 /**
- * Look a province up by any of its spellings — Thai, romanized, abbreviated,
- * with or without a `จังหวัด` / `จ.` prefix.
+ * Find a division by any of its spellings: Thai, Latin characters, or a short
+ * form. A `จังหวัด` or `จ.` label in front of the name is permitted.
  *
  * ```ts
  * findProvince("กทม.")?.nameTh;        // "กรุงเทพมหานคร"
@@ -176,11 +175,11 @@ export function findProvince(input: string): Province | undefined {
 }
 
 /**
- * The subdivision words to print for a province — แขวง/เขต for Bangkok,
- * ตำบล/อำเภอ for everything else.
+ * The subdivision words to print for a division: แขวง and เขต for Bangkok,
+ * ตำบล and อำเภอ for all other divisions.
  *
- * The one thing {@linkcode findProvince} cannot give you: a province the table
- * does not know still needs an answer, and it is ตำบล/อำเภอ.
+ * {@linkcode findProvince} cannot give you this answer for a division that the
+ * table does not know. Such a division uses ตำบล and อำเภอ.
  *
  * ```ts
  * subdivisionWords("กทม.");      // { subdistrict: "แขวง", district: "เขต" }
@@ -192,12 +191,12 @@ export function subdivisionWords(province: string): SubdivisionWords {
 }
 
 /**
- * Split a division name off the end of a value, when the last whitespace-
- * separated token or two names one.
+ * Remove a division name from the end of a value. The function examines the
+ * last 1, 2 or 3 words.
  *
- * This is what lets กรุงเทพมหานคร be read back after being written with no
- * `จังหวัด` label in front of it. An exact match against the seventy-seven
- * names — never a guess.
+ * This lets a parser read กรุงเทพมหานคร again after a write operation, because
+ * that name has no `จังหวัด` label in front of it. The comparison with the 77
+ * names must be exact.
  */
 export function splitTrailingDivision(
   value: string,

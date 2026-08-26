@@ -1,6 +1,6 @@
 /**
- * The ordered field/label table shared by the formatter and the parser, so the
- * order and the vocabulary are defined exactly once.
+ * The table of fields and labels, in sequence. The formatter and the parsers
+ * use this same table. Therefore the sequence and the labels have one definition.
  *
  * @module
  */
@@ -8,22 +8,23 @@
 import type { SubdivisionWords } from "./provinces.ts";
 import type { ThaiAddressField } from "./types.ts";
 
-/** One labelled field: what to write, and what to accept when reading. */
+/** One field with a label: the label to write, and the labels to accept. */
 export interface FieldSpec {
   readonly key: Exclude<ThaiAddressField, "postalCode">;
-  /** The label this package writes. Bangkok changes two of them. */
+  /** The label that this package writes. Bangkok changes 2 of the labels. */
   readonly label: (words: SubdivisionWords) => string;
-  /** Every label read back as this field, including abbreviations. */
+  /** All labels that give this field, also the short forms. */
   readonly accepted: readonly string[];
 }
 
 /**
- * The eleven labelled fields, in the order a Thai address is printed. The
- * postal code trails them with no label of its own.
+ * The 11 fields that have a label, in the sequence of a printed Thai address.
+ * The postal code comes after them and has no label.
  *
- * Order is load-bearing: the parser only looks for labels of fields that come
- * *after* the one it is reading, so a value containing an earlier field's label
- * word — `ซอย` inside `"พระรามที่ 3 ซอย 29"` — cannot be mistaken for a delimiter.
+ * The sequence is important. A parser finds only the labels of the fields
+ * after the field that it reads. Therefore a value can contain the label word of an
+ * earlier field. The parser does not divide the soi `พระรามที่ 3 ซอย 29`,
+ * because `ซอย` is not a label at that position.
  */
 export const FIELD_SPECS: readonly FieldSpec[] = [
   { key: "addressNo", label: () => "เลขที่", accepted: ["บ้านเลขที่", "เลขที่"] },
@@ -47,7 +48,7 @@ export const FIELD_SPECS: readonly FieldSpec[] = [
   { key: "province", label: () => "จังหวัด", accepted: ["จังหวัด", "จ."] },
 ];
 
-/** A five-digit postal code sitting at the end of a value. */
+/** A postal code of 5 digits at the end of a value. */
 export const TRAILING_POSTAL_CODE = /^(.*?)[\s,]*([0-9]{5})$/;
 
 /** Any Thai character. */

@@ -1,7 +1,7 @@
 /**
- * Thai postal addresses as structured data: twelve fields for a Thai address
- * and four for a foreign one, taken from the Revenue Department's ภ.ง.ด.53 and
- * ภ.ง.ด.54 layouts, with a formatter and parsers that do not lose text.
+ * A Thai postal address as data. A Thai address has 12 fields. A foreign
+ * address has 4 fields. The fields come from the Revenue Department forms
+ * ภ.ง.ด.53 and ภ.ง.ด.54. The formatter and the parsers do not delete text.
  *
  * ```ts
  * import { formatAddress, parseAddress, thaiAddress } from "@thai/address-utils";
