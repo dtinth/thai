@@ -1,5 +1,6 @@
 {
   "workspace": [
+    "./address-utils",
     "./carify",
     "./html",
     "./funny-json",
