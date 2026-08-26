@@ -210,7 +210,7 @@ test("reads an empty string as an empty Thai address", () => {
   assert.deepEqual(parseAddress("").warnings, []);
 });
 
-test("knows the seventy-seven provinces", () => {
+test("knows the seventy-seven top-level divisions", () => {
   assert.equal(PROVINCES.length, 77);
   assert.equal(new Set(PROVINCES.map((province) => province.code)).size, 77);
   for (

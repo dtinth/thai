@@ -1,9 +1,12 @@
 /**
- * The seventy-seven provinces plus Bangkok, and the subdivision words each one
- * uses.
+ * Thailand's seventy-seven top-level divisions — seventy-six จังหวัด plus
+ * กรุงเทพมหานคร, which is not a จังหวัด but a metropolitan administration of
+ * the same rank. (That distinction is why the DBD's API calls the field
+ * "CountrySubDivision" rather than "province".) The address field keeps the
+ * name `province`, because that is what the ภ.ง.ด. column is called.
  *
- * Bangkok is the only province whose subdivisions are named แขวง and เขต;
- * everywhere else they are ตำบล and อำเภอ. That is a property of one row in
+ * Bangkok is the only one whose subdivisions are named แขวง and เขต; the
+ * seventy-six provinces use ตำบล and อำเภอ. That is a property of one row in
  * this table, not a rule scattered through the code — and it is deliberately
  * not derived from "is a special administrative area", because เมืองพัทยา is
  * one too and still writes ตำบล/อำเภอ.
@@ -19,7 +22,7 @@ export interface SubdivisionWords {
   readonly district: "อำเภอ" | "เขต";
 }
 
-/** One province. */
+/** One top-level division: a จังหวัด, or กรุงเทพมหานคร. */
 export interface Province {
   /** ISO 3166-2:TH code, e.g. `"TH-50"`. */
   readonly code: string;
@@ -36,7 +39,7 @@ export interface Province {
 const PROVINCIAL: SubdivisionWords = { subdistrict: "ตำบล", district: "อำเภอ" };
 const METROPOLITAN: SubdivisionWords = { subdistrict: "แขวง", district: "เขต" };
 
-/** Canonical Thai name of Bangkok. */
+/** Canonical Thai name of Bangkok — a metropolitan administration, not a จังหวัด. */
 export const BANGKOK = "กรุงเทพมหานคร";
 
 // [ISO code, Thai name, romanized name, variants]

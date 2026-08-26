@@ -94,7 +94,7 @@ function checkProvince(
   if (!findProvince(province)) {
     warnings.push({
       code: "unknown-province",
-      message: `"${province}" is not one of the seventy-seven provinces.`,
+      message: `"${province}" is not one of the seventy-seven divisions.`,
       field: "province",
       text: province,
     });
