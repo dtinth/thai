@@ -1,7 +1,7 @@
-The `@thai/address-utils` package handles Thai postal addresses as structured
-data: **twelve fields** for a Thai address and **four** for a foreign one, taken
-from the Revenue Department's ภ.ง.ด.53 and ภ.ง.ด.54 layouts — the same fields
-those forms ask for, so an address stored this way can fill them in.
+The `@thai/address-utils` package gives you a Thai postal address as data. A
+Thai address has 12 fields. A foreign address has 4 fields. The fields come from
+the Revenue Department forms ภ.ง.ด.53 and ภ.ง.ด.54. You can use an address in
+this shape to complete those forms.
 
 ```ts
 import { formatAddress, parseAddress, thaiAddress } from "@thai/address-utils";
@@ -18,7 +18,7 @@ const address = thaiAddress({
 formatAddress(address);
 // "เลขที่ 99/1 ถนนสุขุมวิท แขวงคลองตัน เขตวัฒนา กรุงเทพมหานคร 10110"
 
-parseAddress(formatAddress(address)).address; // the same twelve fields, unchanged
+parseAddress(formatAddress(address)).address; // the same 12 fields, not changed
 ```
 
 ## The fields
@@ -38,61 +38,77 @@ parseAddress(formatAddress(address)).address; // the same twelve fields, unchang
 | `province`    | จังหวัด       | `PROVINCE`     |
 | `postalCode`  | รหัสไปรษณีย์   | `POSTAL_CODE`  |
 
-A foreign address carries `addressNo`, `road`, `city` and `country`, matching
-ภ.ง.ด.54's office-location block. Every field is a `string` and always present —
-an absent value is `""` — so reading one never needs a fallback. The two shapes
-are told apart by `kind`, never by the country field.
+A foreign address has 4 fields: `addressNo`, `road`, `city` and `country`. These
+fields are the same as the fields in the office block of the ภ.ง.ด.54 form.
 
-## Two parsers, on purpose
+Each field is a string. Each field is always present. A field with no data is an
+empty string. You do not need a default value when you read a field.
 
-`parseAddress` reads this package's own format and nothing else — an exact
-inverse of `formatAddress`, with no guessing. Its only lookup is recognising a
-division name written without a `จังหวัด` label, which is how กรุงเทพมหานคร is
-written.
+The `kind` property tells you which of the 2 shapes an address has. The country
+field does not have this function.
 
-`importAddress` reads text from a person or another system: line breaks and
-commas as separators, Thai digits, a postal code glued to the word before it,
-and a province written with no `จังหวัด` label in front of it.
+## Two functions that read text
 
-Both return the same thing — an address, always, plus warnings:
+`parseAddress` reads only the format of this package. It gives you the same
+fields that `formatAddress` wrote. It does not try to correct unusual text.
+
+`importAddress` reads text from a person or from a different system. It accepts
+line breaks and commas between the fields. It accepts Thai digits. It accepts a
+postal code that touches the word in front of it. It also accepts a division
+name that has no `จังหวัด` label.
+
+The 2 functions give the same result:
 
 ```ts
 interface ParsedAddress {
-  address: Address; // never empty for non-empty input
+  address: Address; // always an address, also for text the parser does not know
   warnings: readonly Warning[]; // "unlabelled-text" | "unknown-province" | "subdivision-wording"
 }
 ```
 
-Neither ever throws, and neither ever drops text. **Nothing evaporates**: every
-character that isn't a label they recognised ends up in some field. The worst
-case is a value in the wrong field, where a person reviewing the result can see
-it — never a value that quietly disappeared.
+Both functions have the same 3 rules:
+
+- They do not throw an error.
+- They always give you an address. Text that is not empty does not give you an
+  empty address.
+- They keep all of the text. Each character that is not a label of this package
+  goes into a field.
+
+In the worst condition, a value goes into the incorrect field. A person who
+examines the result can see that value and can correct it. The parsers do not
+delete text.
+
+If there are no warnings, the text was already in the format of this package.
 
 ```ts
 importAddress("99/1 ถ.สุขุมวิท แขวงคลองตัน เขตวัฒนา กรุงเทพมหานคร 10110");
 // address: { addressNo: "99/1", road: "สุขุมวิท", subdistrict: "คลองตัน",
 //            district: "วัฒนา", province: "กรุงเทพมหานคร", postalCode: "10110", … }
-// warnings: one "unlabelled-text" — the house number carried no label of its own
+// warnings: one "unlabelled-text", because the house number has no label
 ```
 
 ## Bangkok
 
-Thailand has seventy-six จังหวัด plus กรุงเทพมหานคร, which is not a จังหวัด at all
-but a metropolitan administration of the same rank — which is why the DBD's API
-calls this field "CountrySubDivision". The address field keeps the name
-`province`, because that is what the ภ.ง.ด. column is called.
+Thailand has 76 จังหวัด. It also has กรุงเทพมหานคร, which is not a จังหวัด.
+กรุงเทพมหานคร is a metropolitan administration of the same rank. For this reason
+the DBD API calls the field "CountrySubDivision". The address field keeps the
+name `province`, because the ภ.ง.ด. form uses that name for the column.
 
-Two things follow, and both show up in what gets printed. Bangkok is the only
-one of the seventy-seven whose subdivisions are named แขวง and เขต — the
-provinces use ตำบล and อำเภอ — and its name is written **bare**, because `จังหวัด`
-belongs to the seventy-six that are provinces. Both live as one row in the table
-rather than as rules spread through the code, and neither is derived from
-"special administrative area": เมืองพัทยา is one of those too and still writes
-ตำบล/อำเภอ.
+There are 2 results, and you see both of them in the address that you print:
+
+- The subdivisions of Bangkok have the names แขวง and เขต. The 76 provinces use
+  ตำบล and อำเภอ.
+- The name กรุงเทพมหานคร has no label in front of it. The label จังหวัด is only for
+  the 76 provinces.
+
+These 2 facts are data in one row of the table of divisions. They are not rules
+in the code. The package does not calculate them from the status "special
+administrative area". เมืองพัทยา has that status, but เมืองพัทยา uses ตำบล and
+อำเภอ.
 
 ```ts
 formatAddress(thaiAddress({ district: "วัฒนา", province: "กรุงเทพมหานคร" }));
-// "เขตวัฒนา กรุงเทพมหานคร"          — no จังหวัด, because it is not one
+// "เขตวัฒนา กรุงเทพมหานคร"   — no จังหวัด, because Bangkok is not one
 formatAddress(thaiAddress({ district: "เมืองเชียงใหม่", province: "เชียงใหม่" }));
 // "อำเภอเมืองเชียงใหม่ จังหวัดเชียงใหม่"
 
@@ -101,15 +117,15 @@ subdivisionWords("เชียงใหม่"); // { subdistrict: "ตำบล
 findProvince("จ.ภูเก็ต")?.code; // "TH-83"
 ```
 
-Everything else about a division comes off the row itself — `findProvince`
-matches Thai, romanized and abbreviated spellings, with or without a `จังหวัด` /
-`จ.` prefix. `subdivisionWords` exists alongside it for the one case a row
-cannot answer: a province the table does not know still writes ตำบล/อำเภอ.
+`findProvince` accepts a Thai name, a Latin name and a short name. You can also
+write a `จังหวัด` or `จ.` label in front of the name. The row that it gives you
+contains the other data. Use `subdivisionWords` for a division that the table
+does not know. That division uses ตำบล and อำเภอ.
 
-Parsing accepts both wordings for either province, so an address written
-`ตำบล`/`อำเภอ` in Bangkok — by hand, or by an older version of some other
-program — reads back correctly. Formatting then writes the right words, so a
-round trip corrects it:
+Both parsers accept ตำบล and อำเภอ for all divisions. The package can read a
+Bangkok address that has the incorrect words. `formatAddress` then writes the
+correct words. When you read the address and then write it again, the words
+become correct:
 
 ```ts
 const wrong = "เลขที่ 1 ตำบลแสมดำ อำเภอบางขุนเทียน จังหวัดกรุงเทพมหานคร 10150";
@@ -117,44 +133,30 @@ formatAddress(parseAddress(wrong).address);
 // "เลขที่ 1 แขวงแสมดำ เขตบางขุนเทียน กรุงเทพมหานคร 10150"
 ```
 
-## Field values that contain other fields' labels
+## A value that contains the label of a different field
 
-Labels are only read in the order an address is printed, so a value containing
-an _earlier_ field's label word is safe — `ซอยพระรามที่ 3 ซอย 29` keeps its soi
-whole. A value containing a _later_ field's label word does split there, which
-is the same rule working in your favour when a registry crams several fields
-into one:
+The parsers find the labels in the sequence of the printed address. A value that
+contains the label of a field before it is safe. The soi `พระรามที่ 3 ซอย 29`
+keeps all of its text, because `ซอย` is not a label at that position.
+
+A parser divides a value that contains the label of a field after it. This
+behavior is correct when a different system puts more than one field into one
+field:
 
 ```ts
-// what an upstream API returned: building, floor and room in one field
+// An API gave the building name, the floor and the room in one field.
 const dirty = thaiAddress({ building: "ยูนิคอร์น ชั้น 10 ยูนิต 1015,1018" });
 importAddress(formatAddress(dirty)).address;
 // building: "ยูนิคอร์น", floor: "10", room: "1015 1018"
 ```
 
-## What this package does not do
+## Limits
 
-- **No tambon/amphoe database.** Only the seventy-seven divisions are built in
-  (a few kilobytes). Reconciling a subdistrict against a postal code needs the
-  ~7,400-row table, which belongs somewhere else.
-- **No validation function.** Validating an address means parsing it, so the
-  parsers report what they noticed and there is nothing else to call.
-- **No transliteration**, and no address-line splitting beyond the labels above.
-
-## API
-
-```ts
-formatAddress(address: Address): string;
-parseAddress(text: string): ParsedAddress;
-importAddress(text: string): ParsedAddress;
-
-thaiAddress(init?): ThaiAddress;
-foreignAddress(init?): ForeignAddress;
-isThaiAddress(address): address is ThaiAddress;
-THAI_ADDRESS_FIELDS: readonly ThaiAddressField[];
-
-PROVINCES: readonly Province[];
-findProvince(input: string): Province | undefined;
-subdivisionWords(province: string): SubdivisionWords;
-BANGKOK: string;
-```
+- The package does not contain a database of subdistricts and districts. It
+  contains only the table of 77 divisions, which is small. A comparison of a
+  subdistrict with a postal code needs approximately 7,400 more rows. That data
+  belongs in a different package.
+- The package has no function to validate an address. To validate an address,
+  you must first parse it. The parsers give you the warnings. A second function
+  is not necessary.
+- The package does not change Thai text to Latin characters.
