@@ -150,6 +150,23 @@ importAddress(formatAddress(dirty)).address;
 // building: "ยูนิคอร์น", floor: "10", room: "1015 1018"
 ```
 
+## Test vectors
+
+The package contains test vectors. Each vector has 3 parts: the text, the
+address that `parseAddress` reads from that text, and the text that
+`formatAddress` writes back.
+
+```ts
+import { ADDRESS_VECTORS } from "@thai/address-utils/test-vectors";
+```
+
+A different program can use these vectors to show that it agrees with this
+package. This is necessary when you write the same logic again in a different
+language, because 2 programs that do the same work can become different in small
+conditions. The tests of this package use the same vectors, therefore the
+vectors always agree with the code. The file `vectors.json` in the package
+contains the same data for a program that does not read TypeScript.
+
 ## Limits
 
 - The package does not contain a database of subdistricts and districts. It
