@@ -1,0 +1,447 @@
+[
+  {
+    "name": "a canonical Bangkok address",
+    "text": "เลขที่ 99/1 ถนนสุขุมวิท แขวงคลองตัน เขตวัฒนา กรุงเทพมหานคร 10110",
+    "parse": {
+      "address": {
+        "kind": "thai",
+        "addressNo": "99/1",
+        "moo": "",
+        "village": "",
+        "soi": "",
+        "road": "สุขุมวิท",
+        "building": "",
+        "floor": "",
+        "room": "",
+        "subdistrict": "คลองตัน",
+        "district": "วัฒนา",
+        "province": "กรุงเทพมหานคร",
+        "postalCode": "10110"
+      },
+      "warnings": []
+    },
+    "format": "เลขที่ 99/1 ถนนสุขุมวิท แขวงคลองตัน เขตวัฒนา กรุงเทพมหานคร 10110"
+  },
+  {
+    "name": "a canonical provincial address",
+    "text": "เลขที่ 9 หมู่ที่ 4 ตำบลสุเทพ อำเภอเมืองเชียงใหม่ จังหวัดเชียงใหม่ 50200",
+    "parse": {
+      "address": {
+        "kind": "thai",
+        "addressNo": "9",
+        "moo": "4",
+        "village": "",
+        "soi": "",
+        "road": "",
+        "building": "",
+        "floor": "",
+        "room": "",
+        "subdistrict": "สุเทพ",
+        "district": "เมืองเชียงใหม่",
+        "province": "เชียงใหม่",
+        "postalCode": "50200"
+      },
+      "warnings": []
+    },
+    "format": "เลขที่ 9 หมู่ที่ 4 ตำบลสุเทพ อำเภอเมืองเชียงใหม่ จังหวัดเชียงใหม่ 50200"
+  },
+  {
+    "name": "a Bangkok address written with ตำบล and อำเภอ",
+    "text": "เลขที่ 1 ตำบลแสมดำ อำเภอบางขุนเทียน จังหวัดกรุงเทพมหานคร 10150",
+    "parse": {
+      "address": {
+        "kind": "thai",
+        "addressNo": "1",
+        "moo": "",
+        "village": "",
+        "soi": "",
+        "road": "",
+        "building": "",
+        "floor": "",
+        "room": "",
+        "subdistrict": "แสมดำ",
+        "district": "บางขุนเทียน",
+        "province": "กรุงเทพมหานคร",
+        "postalCode": "10150"
+      },
+      "warnings": []
+    },
+    "format": "เลขที่ 1 แขวงแสมดำ เขตบางขุนเทียน กรุงเทพมหานคร 10150"
+  },
+  {
+    "name": "short labels",
+    "text": "เลขที่ 9 ม.4 ต.บางพลีใหญ่ อ.บางพลี จ.สมุทรปราการ 10540",
+    "parse": {
+      "address": {
+        "kind": "thai",
+        "addressNo": "9",
+        "moo": "4",
+        "village": "",
+        "soi": "",
+        "road": "",
+        "building": "",
+        "floor": "",
+        "room": "",
+        "subdistrict": "บางพลีใหญ่",
+        "district": "บางพลี",
+        "province": "สมุทรปราการ",
+        "postalCode": "10540"
+      },
+      "warnings": []
+    },
+    "format": "เลขที่ 9 หมู่ที่ 4 ตำบลบางพลีใหญ่ อำเภอบางพลี จังหวัดสมุทรปราการ 10540"
+  },
+  {
+    "name": "a house number with no label",
+    "text": "99/1 ถนนสุขุมวิท แขวงคลองตัน เขตวัฒนา กรุงเทพมหานคร 10110",
+    "parse": {
+      "address": {
+        "kind": "thai",
+        "addressNo": "99/1",
+        "moo": "",
+        "village": "",
+        "soi": "",
+        "road": "สุขุมวิท",
+        "building": "",
+        "floor": "",
+        "room": "",
+        "subdistrict": "คลองตัน",
+        "district": "วัฒนา",
+        "province": "กรุงเทพมหานคร",
+        "postalCode": "10110"
+      },
+      "warnings": [
+        "unlabelled-text"
+      ]
+    },
+    "format": "เลขที่ 99/1 ถนนสุขุมวิท แขวงคลองตัน เขตวัฒนา กรุงเทพมหานคร 10110"
+  },
+  {
+    "name": "a postal code and no division",
+    "text": "ตำบลคลองตัน อำเภอวัฒนา 10110",
+    "parse": {
+      "address": {
+        "kind": "thai",
+        "addressNo": "",
+        "moo": "",
+        "village": "",
+        "soi": "",
+        "road": "",
+        "building": "",
+        "floor": "",
+        "room": "",
+        "subdistrict": "คลองตัน",
+        "district": "วัฒนา",
+        "province": "",
+        "postalCode": "10110"
+      },
+      "warnings": []
+    },
+    "format": "ตำบลคลองตัน อำเภอวัฒนา 10110"
+  },
+  {
+    "name": "a postal code in Thai digits",
+    "text": "เขตวัฒนา กรุงเทพมหานคร ๑๐๑๑๐",
+    "parse": {
+      "address": {
+        "kind": "thai",
+        "addressNo": "",
+        "moo": "",
+        "village": "",
+        "soi": "",
+        "road": "",
+        "building": "",
+        "floor": "",
+        "room": "",
+        "subdistrict": "",
+        "district": "วัฒนา",
+        "province": "กรุงเทพมหานคร",
+        "postalCode": "๑๐๑๑๐"
+      },
+      "warnings": []
+    },
+    "format": "เขตวัฒนา กรุงเทพมหานคร ๑๐๑๑๐"
+  },
+  {
+    "name": "a soi that contains the word ซอย",
+    "text": "เลขที่ 58-60 ซอยพระรามที่ 3 ซอย 29 แขวงบางโพงพาง เขตยานนาวา กรุงเทพมหานคร 10120",
+    "parse": {
+      "address": {
+        "kind": "thai",
+        "addressNo": "58-60",
+        "moo": "",
+        "village": "",
+        "soi": "พระรามที่ 3 ซอย 29",
+        "road": "",
+        "building": "",
+        "floor": "",
+        "room": "",
+        "subdistrict": "บางโพงพาง",
+        "district": "ยานนาวา",
+        "province": "กรุงเทพมหานคร",
+        "postalCode": "10120"
+      },
+      "warnings": []
+    },
+    "format": "เลขที่ 58-60 ซอยพระรามที่ 3 ซอย 29 แขวงบางโพงพาง เขตยานนาวา กรุงเทพมหานคร 10120"
+  },
+  {
+    "name": "a building, a floor and a room",
+    "text": "เลขที่ 1 ถนนสุขุมวิท อาคารยูนิคอร์น ชั้น 10 ห้องเลขที่ 1015 แขวงบางจาก เขตพระโขนง กรุงเทพมหานคร",
+    "parse": {
+      "address": {
+        "kind": "thai",
+        "addressNo": "1",
+        "moo": "",
+        "village": "",
+        "soi": "",
+        "road": "สุขุมวิท",
+        "building": "ยูนิคอร์น",
+        "floor": "10",
+        "room": "1015",
+        "subdistrict": "บางจาก",
+        "district": "พระโขนง",
+        "province": "กรุงเทพมหานคร",
+        "postalCode": ""
+      },
+      "warnings": []
+    },
+    "format": "เลขที่ 1 ถนนสุขุมวิท อาคารยูนิคอร์น ชั้น 10 ห้องเลขที่ 1015 แขวงบางจาก เขตพระโขนง กรุงเทพมหานคร"
+  },
+  {
+    "name": "a building before the road, which is not the printed sequence",
+    "text": "เลขที่ 1 อาคารเอบีซี ชั้น 10 ถนนสาทรใต้ แขวงทุ่งมหาเมฆ เขตสาทร กรุงเทพมหานคร 10120",
+    "parse": {
+      "address": {
+        "kind": "thai",
+        "addressNo": "1",
+        "moo": "",
+        "village": "",
+        "soi": "",
+        "road": "",
+        "building": "เอบีซี",
+        "floor": "10 ถนนสาทรใต้",
+        "room": "",
+        "subdistrict": "ทุ่งมหาเมฆ",
+        "district": "สาทร",
+        "province": "กรุงเทพมหานคร",
+        "postalCode": "10120"
+      },
+      "warnings": []
+    },
+    "format": "เลขที่ 1 อาคารเอบีซี ชั้น 10 ถนนสาทรใต้ แขวงทุ่งมหาเมฆ เขตสาทร กรุงเทพมหานคร 10120"
+  },
+  {
+    "name": "กรุงเทพมหานคร with no label",
+    "text": "แขวงคลองตัน เขตวัฒนา กรุงเทพมหานคร",
+    "parse": {
+      "address": {
+        "kind": "thai",
+        "addressNo": "",
+        "moo": "",
+        "village": "",
+        "soi": "",
+        "road": "",
+        "building": "",
+        "floor": "",
+        "room": "",
+        "subdistrict": "คลองตัน",
+        "district": "วัฒนา",
+        "province": "กรุงเทพมหานคร",
+        "postalCode": ""
+      },
+      "warnings": []
+    },
+    "format": "แขวงคลองตัน เขตวัฒนา กรุงเทพมหานคร"
+  },
+  {
+    "name": "the short name of Bangkok",
+    "text": "เขตบางขุนเทียน กทม. 10150",
+    "parse": {
+      "address": {
+        "kind": "thai",
+        "addressNo": "",
+        "moo": "",
+        "village": "",
+        "soi": "",
+        "road": "",
+        "building": "",
+        "floor": "",
+        "room": "",
+        "subdistrict": "",
+        "district": "บางขุนเทียน",
+        "province": "กทม.",
+        "postalCode": "10150"
+      },
+      "warnings": []
+    },
+    "format": "เขตบางขุนเทียน กทม. 10150"
+  },
+  {
+    "name": "a division the table does not know",
+    "text": "เขตเมืองใหม่ จังหวัดมณฑลพิเศษ 10150",
+    "parse": {
+      "address": {
+        "kind": "thai",
+        "addressNo": "",
+        "moo": "",
+        "village": "",
+        "soi": "",
+        "road": "",
+        "building": "",
+        "floor": "",
+        "room": "",
+        "subdistrict": "",
+        "district": "เมืองใหม่",
+        "province": "มณฑลพิเศษ",
+        "postalCode": "10150"
+      },
+      "warnings": []
+    },
+    "format": "อำเภอเมืองใหม่ จังหวัดมณฑลพิเศษ 10150"
+  },
+  {
+    "name": "a value with 2 spaces in it",
+    "text": "ถนนพระราม  4 จังหวัดเชียงใหม่",
+    "parse": {
+      "address": {
+        "kind": "thai",
+        "addressNo": "",
+        "moo": "",
+        "village": "",
+        "soi": "",
+        "road": "พระราม  4",
+        "building": "",
+        "floor": "",
+        "room": "",
+        "subdistrict": "",
+        "district": "",
+        "province": "เชียงใหม่",
+        "postalCode": ""
+      },
+      "warnings": []
+    },
+    "format": "ถนนพระราม  4 จังหวัดเชียงใหม่"
+  },
+  {
+    "name": "a building name that starts with อาคาร",
+    "text": "อาคารอาคารเอบีซี",
+    "parse": {
+      "address": {
+        "kind": "thai",
+        "addressNo": "",
+        "moo": "",
+        "village": "",
+        "soi": "",
+        "road": "",
+        "building": "อาคารเอบีซี",
+        "floor": "",
+        "room": "",
+        "subdistrict": "",
+        "district": "",
+        "province": "",
+        "postalCode": ""
+      },
+      "warnings": []
+    },
+    "format": "อาคารอาคารเอบีซี"
+  },
+  {
+    "name": "no text",
+    "text": "",
+    "parse": {
+      "address": {
+        "kind": "thai",
+        "addressNo": "",
+        "moo": "",
+        "village": "",
+        "soi": "",
+        "road": "",
+        "building": "",
+        "floor": "",
+        "room": "",
+        "subdistrict": "",
+        "district": "",
+        "province": "",
+        "postalCode": ""
+      },
+      "warnings": []
+    },
+    "format": ""
+  },
+  {
+    "name": "a foreign address",
+    "text": "221B Baker Street, London, United Kingdom",
+    "parse": {
+      "address": {
+        "kind": "foreign",
+        "addressNo": "221B",
+        "road": "Baker Street",
+        "city": "London",
+        "country": "United Kingdom"
+      },
+      "warnings": []
+    },
+    "format": "221B Baker Street, London, United Kingdom"
+  },
+  {
+    "name": "a foreign address with no city",
+    "text": "58-60, United Kingdom",
+    "parse": {
+      "address": {
+        "kind": "foreign",
+        "addressNo": "58-60",
+        "road": "",
+        "city": "",
+        "country": "United Kingdom"
+      },
+      "warnings": []
+    },
+    "format": "58-60, United Kingdom"
+  },
+  {
+    "name": "a foreign address in Thai characters",
+    "text": "โตเกียว, ญี่ปุ่น",
+    "parse": {
+      "address": {
+        "kind": "foreign",
+        "addressNo": "",
+        "road": "",
+        "city": "โตเกียว",
+        "country": "ญี่ปุ่น"
+      },
+      "warnings": []
+    },
+    "format": "โตเกียว, ญี่ปุ่น"
+  },
+  {
+    "name": "a foreign road that starts with a digit",
+    "text": "3rd Avenue, New York, USA",
+    "parse": {
+      "address": {
+        "kind": "foreign",
+        "addressNo": "",
+        "road": "3rd Avenue",
+        "city": "New York",
+        "country": "USA"
+      },
+      "warnings": []
+    },
+    "format": "3rd Avenue, New York, USA"
+  },
+  {
+    "name": "a country with no other field",
+    "text": "Singapore",
+    "parse": {
+      "address": {
+        "kind": "foreign",
+        "addressNo": "",
+        "road": "",
+        "city": "",
+        "country": "Singapore"
+      },
+      "warnings": []
+    },
+    "format": "Singapore"
+  }
+]
