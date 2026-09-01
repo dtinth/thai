@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.0](https://github.com/dtinth/thai/compare/address-utils-v0.1.0...address-utils-v0.2.0) (2026-09-01)
+
+
+### Features
+
+* **address-utils:** publish the test vectors ([d184240](https://github.com/dtinth/thai/commit/d184240f370384a117acd5b9f2a42c781987a32b))
+
 ## [0.1.0](https://github.com/dtinth/thai/compare/address-utils-v0.0.1...address-utils-v0.1.0) (2026-09-01)
 
 
