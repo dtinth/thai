@@ -133,6 +133,31 @@ formatAddress(parseAddress(wrong).address);
 // "เลขที่ 1 แขวงแสมดำ เขตบางขุนเทียน กรุงเทพมหานคร 10150"
 ```
 
+## Text that you cannot make into fields
+
+`relabelSubdivisions` corrects ตำบล and อำเภอ to แขวง and เขต in an address that
+is already text. Use it for a value from a different system, or for an old value
+in a database, which you must print but must not move.
+
+```ts
+relabelSubdivisions("1 ตำบลแสมดำ อำเภอบางขุนเทียน กรุงเทพมหานคร 10150");
+// "1 แขวงแสมดำ เขตบางขุนเทียน กรุงเทพมหานคร 10150"
+```
+
+The function changes only those 2 words. It does not add a label and it does not
+move the other text. It also changes the words in one direction only: it never
+makes แขวง into ตำบล, because an address that does not give its division would
+then get the incorrect words from a guess.
+
+```ts
+relabelSubdivisions("1 แขวงแสมดำ เขตบางขุนเทียน 10150"); // no change
+```
+
+`formatAddress(parseAddress(text).address)` is not the same operation. That
+writes the address again: it adds the labels, it moves a value that has no
+label, and it can also make แขวง into ตำบล when the address does not give its
+division. Use `relabelSubdivisions` when the text must stay as it is.
+
 ## A value that contains the label of a different field
 
 The parsers find the labels in the sequence of the printed address. A value that
@@ -159,6 +184,8 @@ address that `parseAddress` reads from that text, and the text that
 ```ts
 import { ADDRESS_VECTORS } from "@thai/address-utils/test-vectors";
 ```
+
+Each vector also has the text that `relabelSubdivisions` writes.
 
 A different program can use these vectors to show that it agrees with this
 package. This is necessary when you write the same logic again in a different
