@@ -5,36 +5,43 @@
   "bootstrap-sha": "7b92631e5a8a7b1008034c761c7e2888a12db240",
   "packages": {
     "address-utils": {
+      "component": "address-utils",
       "extra-files": [
         { "type": "json", "path": "deno.json", "jsonpath": "$.version" }
       ]
     },
     "carify": {
+      "component": "carify",
       "extra-files": [
         { "type": "json", "path": "deno.json", "jsonpath": "$.version" }
       ]
     },
     "funny-json": {
+      "component": "funny-json",
       "extra-files": [
         { "type": "json", "path": "deno.json", "jsonpath": "$.version" }
       ]
     },
     "get-or-create": {
+      "component": "get-or-create",
       "extra-files": [
         { "type": "json", "path": "deno.json", "jsonpath": "$.version" }
       ]
     },
     "html": {
+      "component": "html",
       "extra-files": [
         { "type": "json", "path": "deno.json", "jsonpath": "$.version" }
       ]
     },
     "sql-storage": {
+      "component": "sql-storage",
       "extra-files": [
         { "type": "json", "path": "deno.json", "jsonpath": "$.version" }
       ]
     },
     "text-cleaner": {
+      "component": "text-cleaner",
       "extra-files": [
         { "type": "json", "path": "deno.json", "jsonpath": "$.version" }
       ]
