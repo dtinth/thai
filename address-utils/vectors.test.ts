@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { formatAddress, parseAddress } from "./mod.ts";
+import { formatAddress, parseAddress, relabelSubdivisions } from "./mod.ts";
 import { ADDRESS_VECTORS } from "./vectors.ts";
 
 test("the vectors agree with this package", () => {
@@ -14,6 +14,7 @@ test("the vectors agree with this package", () => {
       vector.name,
     );
     assert.equal(formatAddress(result.address), vector.format, vector.name);
+    assert.equal(relabelSubdivisions(vector.text), vector.relabel, vector.name);
   }
 });
 

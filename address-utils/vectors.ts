@@ -29,6 +29,8 @@ export interface AddressVector {
   };
   /** What `formatAddress` writes for that address. */
   readonly format: string;
+  /** What `relabelSubdivisions` writes for the text. */
+  readonly relabel: string;
 }
 
 /** Every test vector. */

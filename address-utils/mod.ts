@@ -45,5 +45,6 @@ export {
   subdivisionWords,
 } from "./provinces.ts";
 export { formatAddress } from "./format.ts";
+export { relabelSubdivisions } from "./relabel.ts";
 export { parseAddress } from "./parse.ts";
 export { importAddress } from "./import.ts";

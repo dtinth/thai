@@ -7,6 +7,7 @@ import {
   importAddress,
   parseAddress,
   PROVINCES,
+  relabelSubdivisions,
   subdivisionWords,
   THAI_ADDRESS_FIELDS,
   thaiAddress,
@@ -439,4 +440,84 @@ test("importAddress never loses text or empties an address", () => {
     assert.notEqual(values(address).trim(), "", `emptied "${text}"`);
     assertNothingLost(text, address);
   }
+});
+
+// ── relabelSubdivisions ──────────────────────────────────────────────────────
+
+const RELABEL: readonly [string, string, string][] = [
+  [
+    "corrects a Bangkok address",
+    "เลขที่ 1 ตำบลแสมดำ อำเภอบางขุนเทียน จังหวัดกรุงเทพมหานคร 10150",
+    "เลขที่ 1 แขวงแสมดำ เขตบางขุนเทียน จังหวัดกรุงเทพมหานคร 10150",
+  ],
+  [
+    "finds the division that has no label",
+    "1 ตำบลแสมดำ อำเภอบางขุนเทียน กรุงเทพฯ 10150",
+    "1 แขวงแสมดำ เขตบางขุนเทียน กรุงเทพฯ 10150",
+  ],
+  [
+    "writes the short labels in full",
+    "1 ต.แสมดำ อ.บางขุนเทียน จ.กรุงเทพมหานคร 10150",
+    "1 แขวงแสมดำ เขตบางขุนเทียน จ.กรุงเทพมหานคร 10150",
+  ],
+  [
+    "looks past the name of the country",
+    "1 ตำบลแสมดำ อำเภอบางขุนเทียน กรุงเทพมหานคร 10150 ประเทศไทย",
+    "1 แขวงแสมดำ เขตบางขุนเทียน กรุงเทพมหานคร 10150 ประเทศไทย",
+  ],
+  [
+    "looks past a postal code in Thai digits",
+    "1 ตำบลแสมดำ อำเภอบางขุนเทียน กรุงเทพมหานคร ๑๐๑๕๐",
+    "1 แขวงแสมดำ เขตบางขุนเทียน กรุงเทพมหานคร ๑๐๑๕๐",
+  ],
+  [
+    "finds a division that touches the word in front of it",
+    "1 ตำบลแสมดำ อำเภอบางขุนเทียนกรุงเทพฯ",
+    "1 แขวงแสมดำ เขตบางขุนเทียนกรุงเทพฯ",
+  ],
+];
+
+for (const [name, input, expected] of RELABEL) {
+  test(`relabelSubdivisions ${name}`, () => {
+    assert.equal(relabelSubdivisions(input), expected);
+  });
+}
+
+const RELABEL_UNCHANGED: readonly [string, string][] = [
+  ["a provincial address", "9 ตำบลบางพลีใหญ่ อำเภอบางพลี จังหวัดสมุทรปราการ 10540"],
+  // The one rule that matters most: never the other direction. This address is
+  // in Bangkok, but it does not say so, and a guess could make it incorrect.
+  ["แขวง and เขต with no division", "1 แขวงแสมดำ เขตบางขุนเทียน 10150"],
+  ["แขวง and เขต and no other text", "แขวงคลองตัน เขตวัฒนา 10110"],
+  [
+    "a road with the name of a division in it",
+    "9 ถนนกรุงเทพ-ชลบุรี ตำบลบางแก้ว อำเภอบางพลี จังหวัดสมุทรปราการ",
+  ],
+  [
+    "a building with the name of a division in it",
+    "9 อาคารกรุงเทพประกันภัย ตำบลบางพลี อำเภอบางพลี จังหวัดสมุทรปราการ",
+  ],
+  [
+    "a word inside the name of a village",
+    "1 หมู่บ้านตำบลทอง แขวงแสมดำ เขตบางขุนเทียน กรุงเทพมหานคร 10150",
+  ],
+  ["no text", ""],
+  ["a foreign address", "1 Test Road, Singapore"],
+];
+
+for (const [name, input] of RELABEL_UNCHANGED) {
+  test(`relabelSubdivisions does not change ${name}`, () => {
+    assert.equal(relabelSubdivisions(input), input);
+  });
+}
+
+test("relabelSubdivisions adds no label and moves no text", () => {
+  // Unlike formatAddress(parseAddress(text)), it is not a re-write: a house
+  // number with no label keeps no label, and nothing changes its position.
+  assert.equal(
+    relabelSubdivisions(
+      "99/1 ถนนสุขุมวิท ตำบลคลองตัน อำเภอวัฒนา กรุงเทพมหานคร 10110",
+    ),
+    "99/1 ถนนสุขุมวิท แขวงคลองตัน เขตวัฒนา กรุงเทพมหานคร 10110",
+  );
 });

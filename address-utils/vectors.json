@@ -20,7 +20,8 @@
       },
       "warnings": []
     },
-    "format": "เลขที่ 99/1 ถนนสุขุมวิท แขวงคลองตัน เขตวัฒนา กรุงเทพมหานคร 10110"
+    "format": "เลขที่ 99/1 ถนนสุขุมวิท แขวงคลองตัน เขตวัฒนา กรุงเทพมหานคร 10110",
+    "relabel": "เลขที่ 99/1 ถนนสุขุมวิท แขวงคลองตัน เขตวัฒนา กรุงเทพมหานคร 10110"
   },
   {
     "name": "a canonical provincial address",
@@ -43,7 +44,8 @@
       },
       "warnings": []
     },
-    "format": "เลขที่ 9 หมู่ที่ 4 ตำบลสุเทพ อำเภอเมืองเชียงใหม่ จังหวัดเชียงใหม่ 50200"
+    "format": "เลขที่ 9 หมู่ที่ 4 ตำบลสุเทพ อำเภอเมืองเชียงใหม่ จังหวัดเชียงใหม่ 50200",
+    "relabel": "เลขที่ 9 หมู่ที่ 4 ตำบลสุเทพ อำเภอเมืองเชียงใหม่ จังหวัดเชียงใหม่ 50200"
   },
   {
     "name": "a Bangkok address written with ตำบล and อำเภอ",
@@ -66,7 +68,8 @@
       },
       "warnings": []
     },
-    "format": "เลขที่ 1 แขวงแสมดำ เขตบางขุนเทียน กรุงเทพมหานคร 10150"
+    "format": "เลขที่ 1 แขวงแสมดำ เขตบางขุนเทียน กรุงเทพมหานคร 10150",
+    "relabel": "เลขที่ 1 แขวงแสมดำ เขตบางขุนเทียน จังหวัดกรุงเทพมหานคร 10150"
   },
   {
     "name": "short labels",
@@ -89,7 +92,8 @@
       },
       "warnings": []
     },
-    "format": "เลขที่ 9 หมู่ที่ 4 ตำบลบางพลีใหญ่ อำเภอบางพลี จังหวัดสมุทรปราการ 10540"
+    "format": "เลขที่ 9 หมู่ที่ 4 ตำบลบางพลีใหญ่ อำเภอบางพลี จังหวัดสมุทรปราการ 10540",
+    "relabel": "เลขที่ 9 ม.4 ต.บางพลีใหญ่ อ.บางพลี จ.สมุทรปราการ 10540"
   },
   {
     "name": "a house number with no label",
@@ -114,7 +118,8 @@
         "unlabelled-text"
       ]
     },
-    "format": "เลขที่ 99/1 ถนนสุขุมวิท แขวงคลองตัน เขตวัฒนา กรุงเทพมหานคร 10110"
+    "format": "เลขที่ 99/1 ถนนสุขุมวิท แขวงคลองตัน เขตวัฒนา กรุงเทพมหานคร 10110",
+    "relabel": "99/1 ถนนสุขุมวิท แขวงคลองตัน เขตวัฒนา กรุงเทพมหานคร 10110"
   },
   {
     "name": "a postal code and no division",
@@ -137,7 +142,8 @@
       },
       "warnings": []
     },
-    "format": "ตำบลคลองตัน อำเภอวัฒนา 10110"
+    "format": "ตำบลคลองตัน อำเภอวัฒนา 10110",
+    "relabel": "ตำบลคลองตัน อำเภอวัฒนา 10110"
   },
   {
     "name": "a postal code in Thai digits",
@@ -160,7 +166,8 @@
       },
       "warnings": []
     },
-    "format": "เขตวัฒนา กรุงเทพมหานคร ๑๐๑๑๐"
+    "format": "เขตวัฒนา กรุงเทพมหานคร ๑๐๑๑๐",
+    "relabel": "เขตวัฒนา กรุงเทพมหานคร ๑๐๑๑๐"
   },
   {
     "name": "a soi that contains the word ซอย",
@@ -183,7 +190,8 @@
       },
       "warnings": []
     },
-    "format": "เลขที่ 58-60 ซอยพระรามที่ 3 ซอย 29 แขวงบางโพงพาง เขตยานนาวา กรุงเทพมหานคร 10120"
+    "format": "เลขที่ 58-60 ซอยพระรามที่ 3 ซอย 29 แขวงบางโพงพาง เขตยานนาวา กรุงเทพมหานคร 10120",
+    "relabel": "เลขที่ 58-60 ซอยพระรามที่ 3 ซอย 29 แขวงบางโพงพาง เขตยานนาวา กรุงเทพมหานคร 10120"
   },
   {
     "name": "a building, a floor and a room",
@@ -206,7 +214,8 @@
       },
       "warnings": []
     },
-    "format": "เลขที่ 1 ถนนสุขุมวิท อาคารยูนิคอร์น ชั้น 10 ห้องเลขที่ 1015 แขวงบางจาก เขตพระโขนง กรุงเทพมหานคร"
+    "format": "เลขที่ 1 ถนนสุขุมวิท อาคารยูนิคอร์น ชั้น 10 ห้องเลขที่ 1015 แขวงบางจาก เขตพระโขนง กรุงเทพมหานคร",
+    "relabel": "เลขที่ 1 ถนนสุขุมวิท อาคารยูนิคอร์น ชั้น 10 ห้องเลขที่ 1015 แขวงบางจาก เขตพระโขนง กรุงเทพมหานคร"
   },
   {
     "name": "a building before the road, which is not the printed sequence",
@@ -229,7 +238,8 @@
       },
       "warnings": []
     },
-    "format": "เลขที่ 1 อาคารเอบีซี ชั้น 10 ถนนสาทรใต้ แขวงทุ่งมหาเมฆ เขตสาทร กรุงเทพมหานคร 10120"
+    "format": "เลขที่ 1 อาคารเอบีซี ชั้น 10 ถนนสาทรใต้ แขวงทุ่งมหาเมฆ เขตสาทร กรุงเทพมหานคร 10120",
+    "relabel": "เลขที่ 1 อาคารเอบีซี ชั้น 10 ถนนสาทรใต้ แขวงทุ่งมหาเมฆ เขตสาทร กรุงเทพมหานคร 10120"
   },
   {
     "name": "กรุงเทพมหานคร with no label",
@@ -252,7 +262,8 @@
       },
       "warnings": []
     },
-    "format": "แขวงคลองตัน เขตวัฒนา กรุงเทพมหานคร"
+    "format": "แขวงคลองตัน เขตวัฒนา กรุงเทพมหานคร",
+    "relabel": "แขวงคลองตัน เขตวัฒนา กรุงเทพมหานคร"
   },
   {
     "name": "the short name of Bangkok",
@@ -275,7 +286,8 @@
       },
       "warnings": []
     },
-    "format": "เขตบางขุนเทียน กทม. 10150"
+    "format": "เขตบางขุนเทียน กทม. 10150",
+    "relabel": "เขตบางขุนเทียน กทม. 10150"
   },
   {
     "name": "a division the table does not know",
@@ -298,7 +310,8 @@
       },
       "warnings": []
     },
-    "format": "อำเภอเมืองใหม่ จังหวัดมณฑลพิเศษ 10150"
+    "format": "อำเภอเมืองใหม่ จังหวัดมณฑลพิเศษ 10150",
+    "relabel": "เขตเมืองใหม่ จังหวัดมณฑลพิเศษ 10150"
   },
   {
     "name": "a value with 2 spaces in it",
@@ -321,7 +334,8 @@
       },
       "warnings": []
     },
-    "format": "ถนนพระราม  4 จังหวัดเชียงใหม่"
+    "format": "ถนนพระราม  4 จังหวัดเชียงใหม่",
+    "relabel": "ถนนพระราม  4 จังหวัดเชียงใหม่"
   },
   {
     "name": "a building name that starts with อาคาร",
@@ -344,7 +358,8 @@
       },
       "warnings": []
     },
-    "format": "อาคารอาคารเอบีซี"
+    "format": "อาคารอาคารเอบีซี",
+    "relabel": "อาคารอาคารเอบีซี"
   },
   {
     "name": "no text",
@@ -367,7 +382,8 @@
       },
       "warnings": []
     },
-    "format": ""
+    "format": "",
+    "relabel": ""
   },
   {
     "name": "a foreign address",
@@ -382,7 +398,8 @@
       },
       "warnings": []
     },
-    "format": "221B Baker Street, London, United Kingdom"
+    "format": "221B Baker Street, London, United Kingdom",
+    "relabel": "221B Baker Street, London, United Kingdom"
   },
   {
     "name": "a foreign address with no city",
@@ -397,7 +414,8 @@
       },
       "warnings": []
     },
-    "format": "58-60, United Kingdom"
+    "format": "58-60, United Kingdom",
+    "relabel": "58-60, United Kingdom"
   },
   {
     "name": "a foreign address in Thai characters",
@@ -412,7 +430,8 @@
       },
       "warnings": []
     },
-    "format": "โตเกียว, ญี่ปุ่น"
+    "format": "โตเกียว, ญี่ปุ่น",
+    "relabel": "โตเกียว, ญี่ปุ่น"
   },
   {
     "name": "a foreign road that starts with a digit",
@@ -427,7 +446,8 @@
       },
       "warnings": []
     },
-    "format": "3rd Avenue, New York, USA"
+    "format": "3rd Avenue, New York, USA",
+    "relabel": "3rd Avenue, New York, USA"
   },
   {
     "name": "a country with no other field",
@@ -442,6 +462,111 @@
       },
       "warnings": []
     },
-    "format": "Singapore"
+    "format": "Singapore",
+    "relabel": "Singapore"
+  },
+  {
+    "name": "แขวง and เขต with no division",
+    "text": "1 แขวงแสมดำ เขตบางขุนเทียน 10150",
+    "parse": {
+      "address": {
+        "kind": "thai",
+        "addressNo": "1",
+        "moo": "",
+        "village": "",
+        "soi": "",
+        "road": "",
+        "building": "",
+        "floor": "",
+        "room": "",
+        "subdistrict": "แสมดำ",
+        "district": "บางขุนเทียน",
+        "province": "",
+        "postalCode": "10150"
+      },
+      "warnings": [
+        "unlabelled-text"
+      ]
+    },
+    "format": "เลขที่ 1 ตำบลแสมดำ อำเภอบางขุนเทียน 10150",
+    "relabel": "1 แขวงแสมดำ เขตบางขุนเทียน 10150"
+  },
+  {
+    "name": "a Bangkok address and the name of the country",
+    "text": "1 ตำบลแสมดำ อำเภอบางขุนเทียน กรุงเทพมหานคร 10150 ประเทศไทย",
+    "parse": {
+      "address": {
+        "kind": "thai",
+        "addressNo": "1",
+        "moo": "",
+        "village": "",
+        "soi": "",
+        "road": "",
+        "building": "",
+        "floor": "",
+        "room": "",
+        "subdistrict": "แสมดำ",
+        "district": "บางขุนเทียน กรุงเทพมหานคร 10150 ประเทศไทย",
+        "province": "",
+        "postalCode": ""
+      },
+      "warnings": [
+        "unlabelled-text"
+      ]
+    },
+    "format": "เลขที่ 1 ตำบลแสมดำ อำเภอบางขุนเทียน กรุงเทพมหานคร 10150 ประเทศไทย",
+    "relabel": "1 แขวงแสมดำ เขตบางขุนเทียน กรุงเทพมหานคร 10150 ประเทศไทย"
+  },
+  {
+    "name": "a division that touches the word in front of it",
+    "text": "1 ตำบลแสมดำ อำเภอบางขุนเทียนกรุงเทพฯ",
+    "parse": {
+      "address": {
+        "kind": "thai",
+        "addressNo": "1",
+        "moo": "",
+        "village": "",
+        "soi": "",
+        "road": "",
+        "building": "",
+        "floor": "",
+        "room": "",
+        "subdistrict": "แสมดำ",
+        "district": "บางขุนเทียนกรุงเทพฯ",
+        "province": "",
+        "postalCode": ""
+      },
+      "warnings": [
+        "unlabelled-text"
+      ]
+    },
+    "format": "เลขที่ 1 ตำบลแสมดำ อำเภอบางขุนเทียนกรุงเทพฯ",
+    "relabel": "1 แขวงแสมดำ เขตบางขุนเทียนกรุงเทพฯ"
+  },
+  {
+    "name": "a road with the name of a division in it",
+    "text": "9 ถนนกรุงเทพ-ชลบุรี ตำบลบางแก้ว อำเภอบางพลี จังหวัดสมุทรปราการ",
+    "parse": {
+      "address": {
+        "kind": "thai",
+        "addressNo": "9",
+        "moo": "",
+        "village": "",
+        "soi": "",
+        "road": "กรุงเทพ-ชลบุรี",
+        "building": "",
+        "floor": "",
+        "room": "",
+        "subdistrict": "บางแก้ว",
+        "district": "บางพลี",
+        "province": "สมุทรปราการ",
+        "postalCode": ""
+      },
+      "warnings": [
+        "unlabelled-text"
+      ]
+    },
+    "format": "เลขที่ 9 ถนนกรุงเทพ-ชลบุรี ตำบลบางแก้ว อำเภอบางพลี จังหวัดสมุทรปราการ",
+    "relabel": "9 ถนนกรุงเทพ-ชลบุรี ตำบลบางแก้ว อำเภอบางพลี จังหวัดสมุทรปราการ"
   }
 ]
