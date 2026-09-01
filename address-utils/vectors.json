@@ -544,6 +544,32 @@
     "relabel": "1 แขวงแสมดำ เขตบางขุนเทียนกรุงเทพฯ"
   },
   {
+    "name": "a postal code in digits that are not Thai and not Latin",
+    "text": "1 ตำบลแสมดำ อำเภอบางขุนเทียน กรุงเทพมหานคร ١٠١٥٠",
+    "parse": {
+      "address": {
+        "kind": "thai",
+        "addressNo": "1",
+        "moo": "",
+        "village": "",
+        "soi": "",
+        "road": "",
+        "building": "",
+        "floor": "",
+        "room": "",
+        "subdistrict": "แสมดำ",
+        "district": "บางขุนเทียน กรุงเทพมหานคร ١٠١٥٠",
+        "province": "",
+        "postalCode": ""
+      },
+      "warnings": [
+        "unlabelled-text"
+      ]
+    },
+    "format": "เลขที่ 1 ตำบลแสมดำ อำเภอบางขุนเทียน กรุงเทพมหานคร ١٠١٥٠",
+    "relabel": "1 ตำบลแสมดำ อำเภอบางขุนเทียน กรุงเทพมหานคร ١٠١٥٠"
+  },
+  {
     "name": "a road with the name of a division in it",
     "text": "9 ถนนกรุงเทพ-ชลบุรี ตำบลบางแก้ว อำเภอบางพลี จังหวัดสมุทรปราการ",
     "parse": {
